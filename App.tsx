@@ -9,6 +9,7 @@ import {
   Karla_700Bold,
 } from '@expo-google-fonts/karla'
 import { Routes } from './src/routes'
+import { Dashboard } from './src/screens/Dashboard'
 
 export default function App() {
 
@@ -17,7 +18,7 @@ export default function App() {
   return (
     <NativeBaseProvider theme={theme}>
       <StatusBar barStyle='dark-content' translucent/>
-      { !fontsLoading ? <Loading/> : <Routes/> }
+      { !fontsLoading ? <Loading/> : <Dashboard/> }
     </NativeBaseProvider>
   )
 }

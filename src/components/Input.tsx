@@ -1,5 +1,4 @@
 import { Icon, IInputProps, Input } from 'native-base'
-import {Eye} from 'phosphor-react-native'
 
 
 type InputProps = IInputProps & {
@@ -10,7 +9,7 @@ type InputProps = IInputProps & {
 export function FormInput({...rest} : InputProps) {
   return(
     <Input
-    backgroundColor='white'
+    bg='gray.7'
     size='lg'
     borderWidth={0}
     py={3}

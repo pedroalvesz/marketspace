@@ -3,16 +3,16 @@ import { SignIn } from '../screens/SignIn'
 import { SignUp } from '../screens/SignUp'
 
 
-type StackRoutesProps = {
+type AuthRoutesProps = {
   signIn: undefined,
   signUp: undefined,
 }
 
-export type StackNavigationRouteProps = StackNavigationProp<StackRoutesProps>
+export type AuthNavigationRouteProps = StackNavigationProp<AuthRoutesProps>
 
-const {Navigator, Screen} = createStackNavigator<StackRoutesProps>()
+const {Navigator, Screen} = createStackNavigator<AuthRoutesProps>()
 
-export function StackRoutes() {
+export function AuthRoutes() {
   return(
     <Navigator screenOptions={{headerShown: false}}>
     <Screen name='signIn' component={SignIn}/>

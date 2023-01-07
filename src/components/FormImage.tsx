@@ -1,5 +1,5 @@
-import { Center, Circle, Image, IImageProps} from "native-base";
-import {PencilSimpleLine} from 'phosphor-react-native'
+import { Center, Circle, Image, IImageProps, Icon} from "native-base";
+import { Octicons } from '@expo/vector-icons';
 
 
 export function FormImage({...rest} : IImageProps) {
@@ -12,7 +12,11 @@ export function FormImage({...rest} : IImageProps) {
       {...rest}
       />
       <Circle size={10} bg='blue_secondary' position='absolute' bottom={-5} right={-5}>
-        <PencilSimpleLine size={16} color='white'/>
+        <Icon
+        as={Octicons}
+        name='pencil'
+        size={16}
+        color='gray.1'/>
       </Circle>
     </Center>
   )
