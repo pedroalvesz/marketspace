@@ -47,7 +47,7 @@ export function SignIn() {
             <FormInput placeholder="E-mail" />
             <FormInput placeholder="Password" />
           </Center>
-          <CustomButton name="Enter" />
+          <CustomButton name="Enter" isBig />
         </VStack>
 
         <Center pt={12} px={12} pb={6} color="white">
@@ -60,6 +60,7 @@ export function SignIn() {
             bg="gray.5"
             textColor="gray.2"
             onPress={handleNavigateRegister}
+            isBig
           />
         </Center>
       </ScrollView>

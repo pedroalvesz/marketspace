@@ -58,7 +58,7 @@ export function SignUp() {
             <FormInput placeholder="Confirm password" />
           </Center>
 
-          <CustomButton name="Register" bg="gray.1" textColor="gray.7" />
+          <CustomButton name="Register" bg="gray.1" textColor="gray.7" isBig />
 
           <Center width="100%" my={12}>
             <Text
@@ -76,6 +76,7 @@ export function SignUp() {
               bg="gray.5"
               textColor="gray.2"
               onPress={handleGoBack}
+              isBig
             />
           </Center>
         </VStack>

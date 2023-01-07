@@ -15,8 +15,8 @@ export function FormImage({...rest} : IImageProps) {
         <Icon
         as={Octicons}
         name='pencil'
-        size={16}
-        color='gray.1'/>
+        size={4}
+        color='gray.6'/>
       </Circle>
     </Center>
   )
