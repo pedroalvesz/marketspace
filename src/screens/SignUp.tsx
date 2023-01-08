@@ -24,7 +24,9 @@ import { FormInput } from '../components/Input'
 
 import { AuthNavigationRouteProps } from '../routes/auth.routes'
 import SmallLogoSvg from '../assets/logo_small.svg'
+import DefaultUserPhoto from '../assets/DefaultUserPhoto.png'
 
+import { api } from '../services/api'
 
 
 type SignUpProps = {
@@ -44,7 +46,7 @@ const SignUpSchema = yup.object({
   password_confirm: yup.string().required('Please confirm your password.').oneOf([yup.ref('password'), 'Passwords do not match.'], null)
 })
 
-import DefaultUserPhoto from '../assets/DefaultUserPhoto.png'
+
 
 export function SignUp() {
 
@@ -62,9 +64,29 @@ export function SignUp() {
     navigation.goBack()
   }
 
-  function handleSignUp(data : SignUpProps) {
-    console.log(data)
+  async function handleSignUp({name, email, tel, password} : SignUpProps) {
+    try {
+      const photoExtension = userPhoto.split('.').pop()
+
+      const photoFile = {
+        name: Math.random() + '_profile',
+        uri: userPhoto,
+        type: `image/${photoExtension}`
+      } as any;
+
+      const userSelectedPhoto = new FormData()
+      userSelectedPhoto.append('avatar', photoFile)
+
+      console.log(userSelectedPhoto)
+
+      await api.post('/users', {userSelectedPhoto, name, email, tel, password}, {headers: {'Content-Type' : 'multipart/form-data'}} )
+
+    } catch (error) {
+      console.log(error.message)
+    }
   }
+
+
 
   async function handleSetUserPhoto() {
     const PhotoSelected = await ImagePicker.launchImageLibraryAsync({
@@ -80,7 +102,6 @@ export function SignUp() {
 
     if(PhotoSelected.assets[0].uri) {
       setUserPhoto(PhotoSelected.assets[0].uri)
-      console.log(userPhoto)
     }
   }
 
