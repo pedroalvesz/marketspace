@@ -1,43 +1,25 @@
-import {BottomTabNavigationProp, createBottomTabNavigator} from '@react-navigation/bottom-tabs'
-
-import { DashBoardRoutes } from './dashboard.routes';
-import { UserAnnounces } from '../screens/UserAnnounces';
-
-import { Octicons } from '@expo/vector-icons';
-import { Feather } from '@expo/vector-icons';
-import { useTheme } from 'native-base';
-
-
+import {createStackNavigator, StackNavigationProp} from '@react-navigation/stack'
+import { CreateAnnounce } from '../screens/CreateAnnounce';
+import { EditAnnounce } from '../screens/EditAnnounce';
+import { HomeTabs } from './hometab.routes';
 
 type AppRoutes = {
-  dashboardRoutes: undefined;
-  userAnnounces: undefined;
+  hometabs: undefined;
+  createAnnounce: undefined;
+  editAnnounce: undefined;
+  previewAnnounce: undefined;
 }
 
-export type AppNavigationRouteProps = BottomTabNavigationProp<AppRoutes>
+export type AppNavigationRouteProps = StackNavigationProp<AppRoutes>
 
-const {Navigator, Screen} = createBottomTabNavigator<AppRoutes>()
-
+const {Navigator, Screen} = createStackNavigator<AppRoutes>()
 
 export function AppRoutes() {
-  const {sizes, colors} = useTheme()
-
-  const ICON_SIZE = sizes[6]
-
   return(
-    <Navigator 
-    screenOptions={{
-      headerShown: false,
-      tabBarShowLabel: false,
-      tabBarActiveTintColor: colors.gray[2],
-      tabBarInactiveTintColor: colors.gray[4],
-      tabBarStyle: {
-        paddingTop: sizes[5],
-        borderTopWidth: 0,
-      }
-      }}>
-      <Screen name='dashboardRoutes' component={DashBoardRoutes} options={{tabBarIcon: ({color}) => <Octicons name="home" size={ICON_SIZE} color={color} />  }}/>
-      <Screen name='userAnnounces' component={UserAnnounces} options={{tabBarIcon: ({color}) => <Feather name="tag" size={ICON_SIZE} color={color} /> }}/>
+    <Navigator screenOptions={{headerShown: false}}>
+      <Screen name='hometabs' component={HomeTabs}/>
+      <Screen name='createAnnounce' component={CreateAnnounce}/>
+      <Screen name='editAnnounce' component={EditAnnounce}/>
     </Navigator>
   )
 }

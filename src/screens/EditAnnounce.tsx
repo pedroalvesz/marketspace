@@ -7,7 +7,7 @@ import { useState } from "react";
 import { CustomButton } from "../components/CustomButton";
 
 
-export function CreateAnnounce() {
+export function EditAnnounce() {
 
   const [isTradable, setIsTradable] = useState(true)
   const [productUsage, setProductUsage] = useState('new')

@@ -3,12 +3,13 @@ import {useNavigation} from '@react-navigation/native'
 import { FontAwesome5 } from '@expo/vector-icons'; 
 
 import { IconButton } from "./IconButton";
-import { DashboardNavigationRouteProps } from "../routes/dashboard.routes";
+import { AppNavigationRouteProps } from "../routes/app.routes";
+
 
 
 export function HomeHeader() {
 
-  const navigation = useNavigation<DashboardNavigationRouteProps>()
+  const navigation = useNavigation<AppNavigationRouteProps>()
 
   function handleCreateAnnounce() {
     navigation.navigate('createAnnounce')

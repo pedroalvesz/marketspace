@@ -9,7 +9,8 @@ import { FormTextArea } from "../components/FormTextArea";
 import { CustomButton } from "../components/CustomButton";
 import {FormInput} from '../components/Input'
 
-import { DashboardNavigationRouteProps } from "../routes/dashboard.routes";
+import { HomeTabNavigationRouteProps } from "../routes/hometab.routes";
+
 
 
 
@@ -21,7 +22,7 @@ export function CreateAnnounce() {
 
 
   const { colors } = useTheme()
-  const navigation = useNavigation<DashboardNavigationRouteProps>()
+  const navigation = useNavigation<HomeTabNavigationRouteProps>()
 
   function handleTradable() {
     setIsTradable(previusState => !previusState)
