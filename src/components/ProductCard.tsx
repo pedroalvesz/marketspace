@@ -1,4 +1,5 @@
 import { HStack, Image, Text, VStack } from "native-base";
+import { UserPhoto } from "./UserPhoto";
 
 
 export function ProductCard() {
@@ -13,7 +14,13 @@ export function ProductCard() {
         alt='Product Image'
         />
 
-        <SellerPhoto/>
+        <UserPhoto
+        borderColor='gray.7'
+        position='absolute'
+        top={1}
+        left={1}
+        alt='Seller Photo'
+        />
 
         <HStack
         bg='blue_primary'
@@ -37,23 +44,5 @@ export function ProductCard() {
         R$ 100,00
       </Text>
     </VStack>
-  )
-}
-
-
-function SellerPhoto() {
-  return(
-    <Image
-    source={require('../assets/DefaultUserPhoto.png')}
-    h={6}
-    w={6}
-    borderWidth={1}
-    borderColor='gray.7'
-    rounded='full'
-    position='absolute'
-    top={1}
-    left={1}
-    alt='Seller Photo'
-    />
   )
 }

@@ -1,5 +1,5 @@
 import { useState, useRef, useMemo } from 'react'
-import { FlatList, Text, View, VStack } from 'native-base'
+import { FlatList, Text, VStack } from 'native-base'
 import { useNavigation } from '@react-navigation/native'
 
 import BottomSheet from '@gorhom/bottom-sheet'
@@ -9,16 +9,17 @@ import { ProductCard } from '../components/ProductCard'
 import { SearchBar } from '../components/SearchBar'
 import { UserProductsInfo } from '../components/UserProdutsInfo'
 
-import { AppNavigationRouteProps } from '../routes/app.routes'
 import { Filters } from '../components/Filters'
 import { FilterModal } from '../components/FilterModal'
+
+import { HomeTabNavigationRouteProps } from '../routes/hometab.routes'
 
 
 
 export function Dashboard() {
   const [Products, setProducts] = useState(['1', '2', '3', '4', '5', '6'])
 
-  const navigation = useNavigation<AppNavigationRouteProps>()
+  const navigation = useNavigation<HomeTabNavigationRouteProps>()
 
   const bottomSheetRef = useRef<BottomSheet>(null)
   const snapPoints = useMemo(() => ['60%'] ,[]) 

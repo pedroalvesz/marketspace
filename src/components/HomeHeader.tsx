@@ -4,6 +4,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 
 import { IconButton } from "./IconButton";
 import { AppNavigationRouteProps } from "../routes/app.routes";
+import { UserPhoto } from "./UserPhoto";
 
 
 
@@ -18,13 +19,8 @@ export function HomeHeader() {
     <HStack width='100%' justifyContent='space-between' alignItems='center' mb={6}>
 
       <HStack>
-        <Image
-        source={require('../assets/DefaultUserPhoto.png')}
-        borderWidth={2}
-        borderColor='blue_secondary'
-        rounded='full'
-        size='48px'
-        alt='User Photo'
+        <UserPhoto
+        size={12}
         />
 
         <VStack ml={2}>

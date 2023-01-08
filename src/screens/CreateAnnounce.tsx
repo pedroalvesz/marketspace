@@ -9,7 +9,7 @@ import { FormTextArea } from "../components/FormTextArea";
 import { CustomButton } from "../components/CustomButton";
 import {FormInput} from '../components/Input'
 
-import { HomeTabNavigationRouteProps } from "../routes/hometab.routes";
+import { AppNavigationRouteProps } from "../routes/app.routes";
 
 
 
@@ -22,7 +22,7 @@ export function CreateAnnounce() {
 
 
   const { colors } = useTheme()
-  const navigation = useNavigation<HomeTabNavigationRouteProps>()
+  const navigation = useNavigation<AppNavigationRouteProps>()
 
   function handleTradable() {
     setIsTradable(previusState => !previusState)
@@ -30,6 +30,10 @@ export function CreateAnnounce() {
 
   function handleGoBack() {
     navigation.goBack()
+  }
+
+  function handlePreview() {
+    navigation.navigate('previewAnnounce')
   }
 
 
@@ -142,16 +146,18 @@ export function CreateAnnounce() {
       </ScrollView>
     </VStack>
 
-    <HStack bg='white' w='100%' position='absolute' bottom={0} h={20} justifyContent='space-between' px={6} py={4}>
+    <HStack bg='white' w='100%' position='absolute' bottom={0} h='90px' justifyContent='space-between' px={6} py={4} pb={6}>
       <CustomButton
       name='Cancel'
       bg='gray.5'
       textColor='gray.2'
+      onPress={handleGoBack}
       />
       <CustomButton
-      name='Submit'
+      name='Preview'
       bg='gray.1'
       textColor='gray.7'
+      onPress={handlePreview}
       />
     </HStack>
     

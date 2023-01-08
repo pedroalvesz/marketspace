@@ -1,7 +1,10 @@
 import {createStackNavigator, StackNavigationProp} from '@react-navigation/stack'
+
+
+import { HomeTabs } from './hometab.routes';
 import { CreateAnnounce } from '../screens/CreateAnnounce';
 import { EditAnnounce } from '../screens/EditAnnounce';
-import { HomeTabs } from './hometab.routes';
+import { PreviewAnnounce } from '../screens/PreviewAnnounce';
 
 type AppRoutes = {
   hometabs: undefined;
@@ -19,6 +22,7 @@ export function AppRoutes() {
     <Navigator screenOptions={{headerShown: false}}>
       <Screen name='hometabs' component={HomeTabs}/>
       <Screen name='createAnnounce' component={CreateAnnounce}/>
+      <Screen name='previewAnnounce' component={PreviewAnnounce} />
       <Screen name='editAnnounce' component={EditAnnounce}/>
     </Navigator>
   )

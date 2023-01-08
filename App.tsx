@@ -12,7 +12,7 @@ import {
 } from '@expo-google-fonts/karla'
 import { Routes } from './src/routes'
 import { UserAnnounces } from './src/screens/UserAnnounces'
-import { AppRoutes } from './src/routes/app.routes'
+import { PreviewAnnounce } from './src/screens/PreviewAnnounce'
 
 export default function App() {
   LogBox.ignoreLogs([
