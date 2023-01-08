@@ -14,6 +14,8 @@ import {useForm, Controller} from 'react-hook-form'
 import {yupResolver} from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
+import * as ImagePicker from 'expo-image-picker'
+
 import { Feather } from '@expo/vector-icons';
 
 import { CustomButton } from '../components/CustomButton'
@@ -42,13 +44,13 @@ const SignUpSchema = yup.object({
   password_confirm: yup.string().required('Please confirm your password.').oneOf([yup.ref('password'), 'Passwords do not match.'], null)
 })
 
-
-
+import DefaultUserPhoto from '../assets/DefaultUserPhoto.png'
 
 export function SignUp() {
 
   const [isPasswordHidden, setIsPasswordHidden] = useState(true)
   const [isConfirmHidden, setIsConfirmHidden] = useState(true)
+  const [userPhoto, setUserPhoto] = useState('')
 
   const navigation = useNavigation<AuthNavigationRouteProps>()
 
@@ -64,6 +66,23 @@ export function SignUp() {
     console.log(data)
   }
 
+  async function handleSetUserPhoto() {
+    const PhotoSelected = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+      aspect: [1,1],
+      allowsEditing: true,
+    })
+
+    if(PhotoSelected.canceled) {
+      return;
+    }
+
+    if(PhotoSelected.assets[0].uri) {
+      setUserPhoto(PhotoSelected.assets[0].uri)
+      console.log(userPhoto)
+    }
+  }
 
 
   return (
@@ -92,7 +111,10 @@ export function SignUp() {
             Create an account to use your marketspace to buy and sell products.
           </Text>
 
-          <FormImage />
+          <FormImage
+          source={userPhoto ? {uri : userPhoto} : DefaultUserPhoto}
+          onPress={handleSetUserPhoto}
+          />
 
           <Center mt={4} mb={6}>
             <Controller

@@ -51,7 +51,7 @@ export function SignIn() {
   }
 
   return (
-    <KeyboardAvoidingView behavior="padding">
+    <KeyboardAvoidingView behavior="height">
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <VStack
           bg="gray.6"
