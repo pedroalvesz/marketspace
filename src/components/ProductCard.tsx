@@ -1,9 +1,11 @@
 import { HStack, Image, Text, VStack } from "native-base";
+import { TouchableOpacity, TouchableOpacityProps } from "react-native";
 import { UserPhoto } from "./UserPhoto";
 
 
-export function ProductCard() {
+export function ProductCard({...rest} : TouchableOpacityProps) {
   return(
+    <TouchableOpacity {...rest} >
     <VStack maxW='155px' mb={6}>
       <VStack>
         <Image
@@ -44,5 +46,6 @@ export function ProductCard() {
         R$ 100,00
       </Text>
     </VStack>
+    </TouchableOpacity>
   )
 }

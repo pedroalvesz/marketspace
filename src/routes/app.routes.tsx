@@ -3,12 +3,15 @@ import {createStackNavigator, StackNavigationProp} from '@react-navigation/stack
 
 import { HomeTabs } from './hometab.routes';
 import { CreateAnnounce } from '../screens/CreateAnnounce';
-import { EditAnnounce } from '../screens/EditAnnounce';
+import { MyAnnounceDetails } from '../screens/MyAnnounceDetails';
 import { PreviewAnnounce } from '../screens/PreviewAnnounce';
+import { SellerAnnounce } from '../screens/SellerAnnounce';
 
 type AppRoutes = {
   hometabs: undefined;
+  sellerAnnoune: undefined;
   createAnnounce: undefined;
+  myAnnounceDetails: undefined;
   editAnnounce: undefined;
   previewAnnounce: undefined;
 }
@@ -21,9 +24,10 @@ export function AppRoutes() {
   return(
     <Navigator screenOptions={{headerShown: false}}>
       <Screen name='hometabs' component={HomeTabs}/>
+      <Screen name='sellerAnnoune' component={SellerAnnounce}/>
       <Screen name='createAnnounce' component={CreateAnnounce}/>
       <Screen name='previewAnnounce' component={PreviewAnnounce} />
-      <Screen name='editAnnounce' component={EditAnnounce}/>
+      <Screen name='myAnnounceDetails' component={MyAnnounceDetails}/>
     </Navigator>
   )
 }

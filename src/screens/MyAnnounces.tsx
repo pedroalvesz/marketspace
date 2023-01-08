@@ -1,13 +1,23 @@
-import { HStack, Icon, VStack, IconButton, Heading, Text, Select, FlatList } from "native-base";
-import {AntDesign} from '@expo/vector-icons'
 import { useState } from "react";
+import { HStack, Icon, VStack, IconButton, Heading, Text, Select, FlatList } from "native-base";
+import { useNavigation } from '@react-navigation/native'
+import {AntDesign} from '@expo/vector-icons'
+
+
 import { ProductCard } from "../components/ProductCard";
+import { AppNavigationRouteProps } from "../routes/app.routes";
 
 
-export function UserAnnounces() {
+export function MyAnnounces() {
 
   const [selectFilter, setSelectFilter] = useState('')
   const [Products, setProducts] = useState(['1','2','3','4','5','6'])
+
+  const navigation = useNavigation<AppNavigationRouteProps>()
+
+  function handleMyAnnouncesDetails() {
+    navigation.navigate('myAnnounceDetails')
+  }
 
   return(
     <VStack flex={1} bg='gray.6' pt={16} px={6}>
@@ -44,7 +54,7 @@ export function UserAnnounces() {
       columnWrapperStyle={{justifyContent: 'space-between'}}
       contentContainerStyle={{paddingBottom: 92}}
       showsVerticalScrollIndicator={false}
-      renderItem={item => <ProductCard/>}
+      renderItem={item => <ProductCard onPress={handleMyAnnouncesDetails}/>}
       />
     </VStack>
   )

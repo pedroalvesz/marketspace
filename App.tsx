@@ -1,6 +1,6 @@
 import { LogBox } from 'react-native'
 import { NativeBaseProvider, StatusBar } from 'native-base'
-import {BottomSheetModalProvider} from '@gorhom/bottom-sheet'
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 
 import { theme } from './styles/theme'
 import { Loading } from './src/components/Loading'
@@ -11,7 +11,6 @@ import {
   Karla_700Bold
 } from '@expo-google-fonts/karla'
 import { Routes } from './src/routes'
-import { UserAnnounces } from './src/screens/UserAnnounces'
 import { PreviewAnnounce } from './src/screens/PreviewAnnounce'
 
 export default function App() {
@@ -24,8 +23,8 @@ export default function App() {
   return (
     <NativeBaseProvider theme={theme}>
       <BottomSheetModalProvider>
-      <StatusBar barStyle="dark-content" translucent />
-      {!fontsLoading ? <Loading /> : <Routes />}
+        <StatusBar barStyle="dark-content" translucent />
+        {!fontsLoading ? <Loading /> : <Routes />}
       </BottomSheetModalProvider>
     </NativeBaseProvider>
   )

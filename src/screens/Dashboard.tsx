@@ -13,20 +13,26 @@ import { Filters } from '../components/Filters'
 import { FilterModal } from '../components/FilterModal'
 
 import { HomeTabNavigationRouteProps } from '../routes/hometab.routes'
+import { AppNavigationRouteProps } from '../routes/app.routes'
 
 
 
 export function Dashboard() {
   const [Products, setProducts] = useState(['1', '2', '3', '4', '5', '6'])
 
-  const navigation = useNavigation<HomeTabNavigationRouteProps>()
+  const tabNavigation = useNavigation<HomeTabNavigationRouteProps>()
+  const stackNavigation = useNavigation<AppNavigationRouteProps>()
 
   const bottomSheetRef = useRef<BottomSheet>(null)
   const snapPoints = useMemo(() => ['60%'] ,[]) 
 
 
   function handleOpenUserAnnounces() {
-    navigation.navigate('userAnnounces')
+    tabNavigation.navigate('userAnnounces')
+  }
+
+  function HandleOpenSellerAnnounce() {
+    stackNavigation.navigate('sellerAnnoune')
   }
 
   function handleModal() {
@@ -59,7 +65,7 @@ export function Dashboard() {
         columnWrapperStyle={{ justifyContent: 'space-between' }}
         contentContainerStyle={{ paddingBottom: 92 }}
         showsVerticalScrollIndicator={false}
-        renderItem={item => <ProductCard />}
+        renderItem={item => <ProductCard onPress={HandleOpenSellerAnnounce}/>}
       />
 
       <BottomSheet
