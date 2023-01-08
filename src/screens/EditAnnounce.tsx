@@ -1,16 +1,10 @@
-import { useState } from "react";
 import { Switch } from "react-native";
 import { Heading, HStack, VStack, IconButton, Icon, Text, Center, ScrollView, Radio, useTheme, Checkbox} from "native-base";
-import {useNavigation} from '@react-navigation/native'
 import {Feather, FontAwesome5} from '@expo/vector-icons'
-
-
-import { FormTextArea } from "../components/FormTextArea";
-import { CustomButton } from "../components/CustomButton";
 import {FormInput} from '../components/Input'
-
-import { DashboardNavigationRouteProps } from "../routes/dashboard.routes";
-
+import { FormTextArea } from "../components/FormTextArea";
+import { useState } from "react";
+import { CustomButton } from "../components/CustomButton";
 
 
 export function CreateAnnounce() {
@@ -18,27 +12,16 @@ export function CreateAnnounce() {
   const [isTradable, setIsTradable] = useState(true)
   const [productUsage, setProductUsage] = useState('new')
   const [paymentMethods, setPaymentMethods] = useState([])
-
-
   const { colors } = useTheme()
-  const navigation = useNavigation<DashboardNavigationRouteProps>()
 
   function handleTradable() {
     setIsTradable(previusState => !previusState)
   }
-
-  function handleGoBack() {
-    navigation.goBack()
-  }
-
-
-
   return(
     <>
     <VStack flex={1} bg='gray.6' pt={16} px={6}>
       <HStack width='full' alignItems='center' justifyContent='space-between' mb={6}>
         <IconButton
-        onPress={handleGoBack}
         icon={<Icon
           as={Feather}
           name='arrow-left'
@@ -46,7 +29,6 @@ export function CreateAnnounce() {
           color='gray.1'
           />}
         />
-
         <Heading fontFamily='heading' fontSize='xl' color='gray.1' flex={1} textAlign="center" ml={-12}>
           Create Announce
         </Heading>

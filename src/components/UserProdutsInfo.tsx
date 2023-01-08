@@ -1,8 +1,11 @@
-import { Heading, HStack, Icon, Text, VStack } from "native-base";
+import { TouchableOpacity, TouchableOpacityProps } from "react-native";
+import { Heading, HStack, Icon, Text, VStack} from "native-base";
+
 import { Feather } from '@expo/vector-icons';
 
 
-export function UserProductsInfo() {
+export function UserProductsInfo({...rest} : TouchableOpacityProps) {
+
   return(
     <HStack width='100%' justifyContent='space-between' alignItems='center' bg='blue_secondary:alpha.30' py={3} px={4} rounded='md' mb={8}>
 
@@ -19,15 +22,17 @@ export function UserProductsInfo() {
         </VStack>
       </HStack>
 
-      <HStack alignItems='center'>
-        <Text fontFamily='heading' fontSize='xs' color='blue_primary'>My announces</Text>
-        <Icon
-        as={Feather}
-        name='arrow-right'
-        size={5}
-        color='blue_primary'
-        />
-      </HStack>
+      <TouchableOpacity {...rest}>
+        <HStack alignItems='center'>
+          <Text fontFamily='heading' fontSize='xs' color='blue_primary'>My announces</Text>
+          <Icon
+          as={Feather}
+          name='arrow-right'
+          size={5}
+          color='blue_primary'
+          />
+        </HStack>
+      </TouchableOpacity>
     </HStack>
   )
 }

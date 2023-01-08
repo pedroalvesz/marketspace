@@ -1,9 +1,18 @@
-import { Button, HStack, Icon, Image, Text, VStack } from "native-base";
-import { IconButton } from "./IconButton";
+import { HStack, Icon, Image, Text, VStack } from "native-base";
+import {useNavigation} from '@react-navigation/native'
 import { FontAwesome5 } from '@expo/vector-icons'; 
+
+import { IconButton } from "./IconButton";
+import { DashboardNavigationRouteProps } from "../routes/dashboard.routes";
 
 
 export function HomeHeader() {
+
+  const navigation = useNavigation<DashboardNavigationRouteProps>()
+
+  function handleCreateAnnounce() {
+    navigation.navigate('createAnnounce')
+  }
   return(
     <HStack width='100%' justifyContent='space-between' alignItems='center' mb={6}>
 
@@ -15,8 +24,8 @@ export function HomeHeader() {
         rounded='full'
         size='48px'
         alt='User Photo'
-
         />
+
         <VStack ml={2}>
           <Text fontFamily='body' fontSize='md' color='gray.1'>
             Welcome,
@@ -26,11 +35,13 @@ export function HomeHeader() {
           </Text>
         </VStack>
       </HStack>
+
       <IconButton
         name='Announce'
         bg='gray.1'
         textColor='gray.7'
         leftIcon={<Icon as={FontAwesome5} name='plus'/>}
+        onPress={handleCreateAnnounce}
         />
     </HStack>
   )

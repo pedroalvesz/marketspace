@@ -12,7 +12,7 @@ import { CustomButton } from '../components/CustomButton'
 import LogoSvg from '../assets/logo.svg'
 import SubTitleSvg from '../assets/subtitle.svg'
 import { FormInput } from '../components/Input'
-import { AuthNavigationRouteProps } from '../routes/AuthRoutes'
+import { AuthNavigationRouteProps } from '../routes/auth.routes'
 
 export function SignIn() {
   const navigation = useNavigation<AuthNavigationRouteProps>()

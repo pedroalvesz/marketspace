@@ -14,7 +14,7 @@ import { CustomButton } from '../components/CustomButton'
 import { FormImage } from '../components/FormImage'
 import { FormInput } from '../components/Input'
 
-import { AuthNavigationRouteProps } from '../routes/AuthRoutes'
+import { AuthNavigationRouteProps } from '../routes/auth.routes'
 
 export function SignUp() {
   const navigation = useNavigation<AuthNavigationRouteProps>()
