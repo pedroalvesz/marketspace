@@ -1,25 +1,33 @@
-import { Icon, IInputProps, Input } from 'native-base'
+import {IInputProps, Input, FormControl, IconButton, Icon } from 'native-base'
 
 
 type InputProps = IInputProps & {
-
+  errorMessage?: string | null;
 }
 
 
-export function FormInput({...rest} : InputProps) {
+export function FormInput({errorMessage, ...rest} : InputProps) {
   return(
-    <Input
-    bg='gray.7'
-    size='lg'
-    borderWidth={0}
-    py={3}
-    px={4}
-    mb={4}
-    _focus={{
-      borderWidth: 1,
-      borderColor: 'gray.3'
-    }}
-    {...rest}
-    />
+    <FormControl isInvalid={!!errorMessage} mb={4}>
+      <Input
+      bg='gray.7'
+      size='lg'
+      borderWidth={0}
+      w='100%'
+      py={3}
+      px={4}
+      _focus={{
+        bg: "gray.7",
+        borderWidth: 1,
+        borderColor: 'gray.3'
+      }}
+
+      {...rest}
+      />
+
+      <FormControl.ErrorMessage _text={{ color: 'red.500'}}>
+        {errorMessage}
+      </FormControl.ErrorMessage>
+    </FormControl>
   )
 }
