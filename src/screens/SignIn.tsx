@@ -20,6 +20,7 @@ import LogoSvg from '../assets/logo.svg'
 import SubTitleSvg from '../assets/subtitle.svg'
 import { FormInput } from '../components/Input'
 import { AuthNavigationRouteProps } from '../routes/auth.routes'
+import { useAuth } from '../hooks/useAuth'
 
 
 type SignInProps = {
@@ -35,6 +36,7 @@ const SignInSchema = yup.object({
 
 export function SignIn() {
 
+  const {signIn} = useAuth()
   const [isPasswordHidden, setIsPasswordHidden] = useState(true)
 
   const navigation = useNavigation<AuthNavigationRouteProps>()
@@ -46,8 +48,12 @@ export function SignIn() {
     navigation.navigate('signUp')
   }
 
-  function handleSignIn(data: SignInProps) {
-    console.log(data)
+  async function handleSignIn({email, password}: SignInProps) {
+    try {
+      await signIn(email, password)
+    } catch (error) {
+      
+    }
   }
 
   return (

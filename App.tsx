@@ -11,7 +11,7 @@ import {
   Karla_700Bold
 } from '@expo-google-fonts/karla'
 import { Routes } from './src/routes'
-import { PreviewAnnounce } from './src/screens/PreviewAnnounce'
+import { AppContextProvider } from './src/contexts/AppContext'
 
 export default function App() {
   LogBox.ignoreLogs([
@@ -24,7 +24,9 @@ export default function App() {
     <NativeBaseProvider theme={theme}>
       <BottomSheetModalProvider>
         <StatusBar barStyle="dark-content" translucent />
-        {!fontsLoading ? <Loading /> : <Routes />}
+        <AppContextProvider>
+          {!fontsLoading ? <Loading /> : <Routes />}
+        </AppContextProvider>
       </BottomSheetModalProvider>
     </NativeBaseProvider>
   )

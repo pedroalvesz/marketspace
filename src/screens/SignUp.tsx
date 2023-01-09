@@ -27,6 +27,7 @@ import SmallLogoSvg from '../assets/logo_small.svg'
 import DefaultUserPhoto from '../assets/DefaultUserPhoto.png'
 
 import { api } from '../services/api'
+import { useAuth } from '../hooks/useAuth'
 
 
 type SignUpProps = {
@@ -50,6 +51,7 @@ const SignUpSchema = yup.object({
 
 export function SignUp() {
 
+  const { signIn } = useAuth()
   const [isPasswordHidden, setIsPasswordHidden] = useState(true)
   const [isConfirmHidden, setIsConfirmHidden] = useState(true)
   const [userPhoto, setUserPhoto] = useState('')
@@ -69,17 +71,20 @@ export function SignUp() {
       const photoExtension = userPhoto.split('.').pop()
 
       const photoFile = {
-        name: Math.random() + '_profile',
+        name: `${name}.${photoExtension}`,
         uri: userPhoto,
         type: `image/${photoExtension}`
       } as any;
 
-      const userSelectedPhoto = new FormData()
-      userSelectedPhoto.append('avatar', photoFile)
+      const userData = new FormData()
+      userData.append('avatar', photoFile)
+      userData.append('name', name )
+      userData.append('email', email)
+      userData.append('tel', tel)
+      userData.append('password', password)
 
-      console.log(userSelectedPhoto)
-
-      await api.post('/users', {userSelectedPhoto, name, email, tel, password}, {headers: {'Content-Type' : 'multipart/form-data'}} )
+      await api.post('/users', userData, {headers: {'Content-Type' : 'multipart/form-data'}} )
+      await signIn(email, password)
 
     } catch (error) {
       console.log(error.message)
