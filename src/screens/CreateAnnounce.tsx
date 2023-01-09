@@ -16,8 +16,12 @@ import { AppNavigationRouteProps } from "../routes/app.routes";
 
 export function CreateAnnounce() {
 
-  const [isTradable, setIsTradable] = useState(true)
+  const [images, setImages] = useState([])
+  const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
   const [productUsage, setProductUsage] = useState('new')
+  const [price, setPrice] = useState('')
+  const [isTradable, setIsTradable] = useState(true)
   const [paymentMethods, setPaymentMethods] = useState([])
 
 
@@ -33,9 +37,17 @@ export function CreateAnnounce() {
   }
 
   function handlePreview() {
-    navigation.navigate('previewAnnounce')
-  }
+    const data = {
+      title,
+      description,
+      productUsage,
+      price,
+      isTradable,
+      paymentMethods,
+    }
 
+    navigation.navigate('previewAnnounce', {data})
+  }
 
 
   return(
@@ -81,10 +93,12 @@ export function CreateAnnounce() {
         
         <FormInput
         placeholder='Product Title'
+        onChangeText={setTitle}
         />
 
         <FormTextArea
         placeholder='Product Description'
+        onChangeText={setDescription}
         />
         
         <Radio.Group
@@ -109,6 +123,7 @@ export function CreateAnnounce() {
         <FormInput
         placeholder='Product price'
         leftElement={<Icon as={FontAwesome5} name='dollar-sign' color='gray.1' size={5} ml={4}/>}
+        onChangeText={setPrice}
         />
 
         <Text fontFamily='heading' fontSize='sm' color='gray.2' mb={3}>

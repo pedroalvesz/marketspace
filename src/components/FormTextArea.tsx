@@ -14,6 +14,7 @@ export function FormTextArea({...rest} : ITextAreaProps ) {
     px={4}
     mb={4}
     _focus={{
+      bg: "gray.7",
       borderWidth: 1,
       borderColor: 'gray.3'
     }}

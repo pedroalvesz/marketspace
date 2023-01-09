@@ -1,16 +1,23 @@
-import { Box, Heading, HStack, ScrollView, Text, VStack } from "native-base";
-import {useNavigation} from '@react-navigation/native'
+import {Heading, HStack, ScrollView, Text, VStack } from "native-base";
+import {useNavigation, useRoute} from '@react-navigation/native'
 
 import { CustomButton } from "../components/CustomButton";
 import { ImagesCarousel } from "../components/ImageCarousel";
-import { AppNavigationRouteProps } from "../routes/app.routes";
 import { UserPhoto } from "../components/UserPhoto";
 import { Tag } from "../components/Tag";
+
+import { AppNavigationRouteProps } from "../routes/app.routes";
+import { CreateAnnounceDTO } from "../dtos/CreateAnnounceDTO";
+import { useAuth } from "../hooks/useAuth";
 
 
 export function PreviewAnnounce() {
 
+  const {user} = useAuth()
   const navigation = useNavigation<AppNavigationRouteProps>()
+
+  const route = useRoute()
+  const {data} = route.params as CreateAnnounceDTO
 
   function handleGoBack() {
     navigation.goBack()
@@ -35,18 +42,18 @@ export function PreviewAnnounce() {
         <HStack alignItems='center' mb={6}>
           <UserPhoto/>
           <Text fontFamily="body" fontSize="sm" color="gray.1" ml={2}>
-            User Name
+            {user.name}
           </Text>
         </HStack>
 
         <Tag
-        name='new'
+        name={data.productUsage}
         isActive={false}
         />
 
         <HStack justifyContent='space-between' my={2}>
           <Heading fontFamily='heading' fontSize='xl' color='gray.1'>
-            Motorcycle
+            {data.title}
           </Heading>
 
           <HStack alignItems='center'>
@@ -55,13 +62,13 @@ export function PreviewAnnounce() {
             </Text>
             
             <Text fontFamily='heading' fontSize='xl' color='blue_secondary'>
-            45,00
+            {data.price}
             </Text>
           </HStack>
         </HStack>
 
         <Text fontFamily='body' fontSize='sm' color='gray.2'>
-          Cras congue cursus in tortor sagittis placerat nunc, tellus arcu. Vitae ante leo eget maecenas urna mattis cursus.  
+          {data.description}  
         </Text>
 
         <HStack alignItems='center' mt={6} mb={4}>
@@ -70,12 +77,12 @@ export function PreviewAnnounce() {
           </Text>
 
           <Text fontFamily='body' fontSize='sm' color='gray.2'>
-            No.
+            {data.isTradable ? 'Yes.' : 'No.'}
           </Text>
         </HStack>
 
         <Text fontFamily='heading' fontSize='md' color='gray.2' mr={2}>
-            Payment Methods:
+            Payment Methods: {data.paymentMethods}
         </Text>
 
 
