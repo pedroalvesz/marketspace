@@ -5,10 +5,15 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { IconButton } from "./IconButton";
 import { AppNavigationRouteProps } from "../routes/app.routes";
 import { UserPhoto } from "./UserPhoto";
+import { api } from "../services/api";
 
 
+type Props = {
+  name: string,
+  avatar: string,
+}
 
-export function HomeHeader() {
+export function HomeHeader({name, avatar} : Props) {
 
   const navigation = useNavigation<AppNavigationRouteProps>()
 
@@ -20,6 +25,7 @@ export function HomeHeader() {
 
       <HStack>
         <UserPhoto
+        //source={{uri: `${api.defaults.baseURL}/avatar/${avatar}`}}
         size={12}
         />
 
@@ -28,7 +34,7 @@ export function HomeHeader() {
             Welcome,
           </Text>
           <Text fontFamily='heading' fontSize='md' color='gray.1'>
-            Pedro!
+            {name}!
           </Text>
         </VStack>
       </HStack>

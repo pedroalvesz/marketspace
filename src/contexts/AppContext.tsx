@@ -1,7 +1,8 @@
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useEffect, useState } from "react";
 import { UserDTO } from "../dtos/UserDTO";
 import { api } from "../services/api";
-import { storageUserSave } from "../storage/StorageUser";
+import { storageTokenGet, storageTokenSave } from "../storage/StorageToken";
+import { storageUserGet, storageUserSave } from "../storage/StorageUser";
 
 
 export const AppContext = createContext<AppContextDataProps>({} as AppContextDataProps)
@@ -24,12 +25,24 @@ export function AppContextProvider({ children }: ProviderProps) {
 
 
 
-  async function userAndTokenUpdate(userData : UserDTO, token: string) {
+
+  async function userAndTokenSave(userData : UserDTO, token: string) {
     try {
       await storageUserSave(userData)
-      setUser(userData)
+      await storageTokenSave(token)
     } catch (error) {
-      
+      throw error
+    }
+  }
+
+  async function userAndTokenUpdate(userData : UserDTO, token: string) {
+    try {
+
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`
+      setUser(userData)
+
+    } catch (error) {
+      throw error
     }
   }
   
@@ -39,13 +52,31 @@ export function AppContextProvider({ children }: ProviderProps) {
       const { data } = await api.post('/sessions', {email, password})
 
       if(data.user && data.token) {
+        await userAndTokenSave(data.user, data.token)
         await userAndTokenUpdate(data.user, data.token)
       }
 
     } catch (error) {
+      throw error
+    }
+  }
+
+  async function loadUserData() {
+    try {
+      const userLogged = await storageUserGet()
+      const userToken = await storageTokenGet()
+
+      if(userLogged && userToken) {
+        await userAndTokenUpdate(userLogged, userToken)
+      }
+    } catch (error) {
       
     }
   }
+
+  useEffect(() => {
+    loadUserData()
+  },[])
 
   return(
     <AppContext.Provider value={{signIn, user}}>

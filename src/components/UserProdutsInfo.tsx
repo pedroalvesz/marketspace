@@ -4,7 +4,12 @@ import { Heading, HStack, Icon, Text, VStack} from "native-base";
 import { Feather } from '@expo/vector-icons';
 
 
-export function UserProductsInfo({...rest} : TouchableOpacityProps) {
+type Props = TouchableOpacityProps & {
+  quantity: number,
+}
+
+
+export function UserProductsInfo({quantity, ...rest} : Props) {
 
   return(
     <HStack width='100%' justifyContent='space-between' alignItems='center' bg='blue_secondary:alpha.30' py={3} px={4} rounded='md' mb={8}>
@@ -17,7 +22,7 @@ export function UserProductsInfo({...rest} : TouchableOpacityProps) {
         color='blue_primary'
         />
         <VStack ml={4}>
-          <Heading fontFamily='heading' fontSize='xl' color='gray.2'>4</Heading>
+          <Heading fontFamily='heading' fontSize='xl' color='gray.2'>{quantity}</Heading>
           <Text fontFamily='body' fontSize='xs' color='gray.2'>active announces</Text>
         </VStack>
       </HStack>

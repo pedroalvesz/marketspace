@@ -1,6 +1,6 @@
-import { useState, useRef, useMemo } from 'react'
+import { useState, useRef, useMemo, useCallback, useEffect } from 'react'
 import { FlatList, Text, VStack } from 'native-base'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useFocusEffect } from '@react-navigation/native'
 
 import BottomSheet from '@gorhom/bottom-sheet'
 
@@ -14,11 +14,15 @@ import { FilterModal } from '../components/FilterModal'
 
 import { HomeTabNavigationRouteProps } from '../routes/hometab.routes'
 import { AppNavigationRouteProps } from '../routes/app.routes'
+import { api } from '../services/api'
+import { useAuth } from '../hooks/useAuth'
 
 
 
 export function Dashboard() {
-  const [Products, setProducts] = useState(['1', '2', '3', '4', '5', '6'])
+  const {user} = useAuth()
+  const [userProducts, setUserProducts] = useState([])
+  const [Products, setProducts] = useState([])
 
   const tabNavigation = useNavigation<HomeTabNavigationRouteProps>()
   const stackNavigation = useNavigation<AppNavigationRouteProps>()
@@ -40,15 +44,46 @@ export function Dashboard() {
   }
 
 
+
+  async function fetchUserProducts() {
+    try {
+      const { data } = await api.get('/users/products')
+      setUserProducts(data)
+      console.log(data)
+    } catch (error) {
+      
+    }
+  }
+
+  async function fetchProducts() {
+    try {
+      const { data } = await api.get('/products')
+
+      setProducts(data)
+      console.log(data)
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
+
+  useEffect(() => {
+    fetchUserProducts
+  },[])
+
+  useFocusEffect(useCallback(() => {
+    fetchProducts()
+  },[Products]))
+
   return (
     <VStack flex={1} bg="gray.6" pt={16} px={6}>
-      <HomeHeader />
+      <HomeHeader name={user.name} avatar={user.avatar} />
 
       <Text fontFamily="body" fontSize="sm" color="gray.3" mb={3}>
         Your on sale products
       </Text>
 
-      <UserProductsInfo onPress={handleOpenUserAnnounces} />
+      <UserProductsInfo quantity={userProducts.length} onPress={handleOpenUserAnnounces} />
 
       <Text fontFamily="body" fontSize="sm" color="gray.3" mb={3}>
         Products on sale
