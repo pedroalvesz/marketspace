@@ -1,10 +1,11 @@
 export type CreateAnnounceDTO = {
   data: {
-    title : string,
+    images: string[],
+    name : string,
     description : string,
-    productUsage : string,
-    price : string,
-    isTradable : boolean,
-    paymentMethods : string[],
+    is_new : boolean,
+    price : number,
+    accept_trade : boolean,
+    payment_methods : string[],
   }
 }

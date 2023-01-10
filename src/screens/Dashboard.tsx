@@ -49,7 +49,7 @@ export function Dashboard() {
     try {
       const { data } = await api.get('/users/products')
       setUserProducts(data)
-      console.log(data)
+      console.log('userproducts',data)
     } catch (error) {
       
     }
@@ -60,7 +60,7 @@ export function Dashboard() {
       const { data } = await api.get('/products')
 
       setProducts(data)
-      console.log(data)
+      console.log('all products',data)
     } catch (error) {
       console.log(error.message)
     }
@@ -73,7 +73,7 @@ export function Dashboard() {
 
   useFocusEffect(useCallback(() => {
     fetchProducts()
-  },[Products]))
+  },[]))
 
   return (
     <VStack flex={1} bg="gray.6" pt={16} px={6}>

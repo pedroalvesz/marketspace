@@ -1,17 +1,14 @@
 import { Image } from 'native-base'
-import * as React from 'react'
-import { Dimensions, Text } from 'react-native'
-import { View } from 'native-base'
+import {useState} from 'react'
+import { Dimensions } from 'react-native'
 import Carousel from 'react-native-reanimated-carousel'
 
-export function ImagesCarousel() {
-  const { width } = Dimensions.get('window')
+type Props = {
+  images: string[],
+}
 
-  const [images, setImages] = React.useState([
-    'https://source.unsplash.com/random/900×700/?fruit',
-    'https://source.unsplash.com/random/900×700/?fruit',
-    'https://source.unsplash.com/random/900×700/?fruit'
-  ])
+export function ImagesCarousel({images} : Props) {
+  const { width } = Dimensions.get('window')
 
   return (
       <Carousel

@@ -1,5 +1,7 @@
-import {Heading, HStack, ScrollView, Text, VStack } from "native-base";
+import {Heading, HStack, Icon, ScrollView, Text, VStack } from "native-base";
 import {useNavigation, useRoute} from '@react-navigation/native'
+
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { CustomButton } from "../components/CustomButton";
 import { ImagesCarousel } from "../components/ImageCarousel";
@@ -9,6 +11,7 @@ import { Tag } from "../components/Tag";
 import { AppNavigationRouteProps } from "../routes/app.routes";
 import { CreateAnnounceDTO } from "../dtos/CreateAnnounceDTO";
 import { useAuth } from "../hooks/useAuth";
+import { api } from "../services/api";
 
 
 export function PreviewAnnounce() {
@@ -23,6 +26,45 @@ export function PreviewAnnounce() {
     navigation.goBack()
   }
 
+  async function handleAnnounce() {
+
+    const {images, name, description, is_new, price, accept_trade, payment_methods} = data;
+    const response = await api.post('/products', {name, description, is_new, price, accept_trade, payment_methods});
+
+    console.log('Envio do Produto =>', response.data)
+    const {id} = response.data
+
+    await postImages(id, name, images)
+  }
+
+
+  async function postImages(id: string, name: string, images: string[]) {
+
+    const imageFiles = [] as any
+
+    for(let i = 0; i < images.length; i++ ) {
+
+      const imageExtension = images[i].split('.').pop()
+      const imageFile = {
+        name: `${name}.${imageExtension}`,
+        uri: images[i],
+        type: `image/${imageExtension}`
+      }
+
+      imageFiles.push(imageFile)
+    }
+
+    console.log(imageFiles)
+
+    const imageData = new FormData()
+    imageData.append('product_id', id)
+    imageData.append('images', imageFiles)
+
+    const response = await api.post('/products/images/', imageData, {headers: {'Content-Type' : 'multipart/form-data'}})
+
+    console.log('Envio das Images =>',response.data)
+
+  }
 
   return(
     <VStack flex={1} bg='gray.6'>
@@ -36,7 +78,7 @@ export function PreviewAnnounce() {
         </Text>
       </VStack>
 
-      <ImagesCarousel/>
+      <ImagesCarousel images={data.images}/>
 
       <ScrollView flex={1} px={6} py={5}>
         <HStack alignItems='center' mb={6}>
@@ -47,13 +89,13 @@ export function PreviewAnnounce() {
         </HStack>
 
         <Tag
-        name={data.productUsage}
+        name={data.is_new ? 'New' : 'Used'}
         isActive={false}
         />
 
-        <HStack justifyContent='space-between' my={2}>
+        <HStack justifyContent='space-between' alignItems='center' my={2}>
           <Heading fontFamily='heading' fontSize='xl' color='gray.1'>
-            {data.title}
+            {data.name}
           </Heading>
 
           <HStack alignItems='center'>
@@ -77,13 +119,24 @@ export function PreviewAnnounce() {
           </Text>
 
           <Text fontFamily='body' fontSize='sm' color='gray.2'>
-            {data.isTradable ? 'Yes.' : 'No.'}
+            {data.accept_trade ? 'Yes.' : 'No.'}
           </Text>
         </HStack>
 
         <Text fontFamily='heading' fontSize='md' color='gray.2' mr={2}>
-            Payment Methods: {data.paymentMethods}
+            Payment Methods:
         </Text>
+        
+        <VStack mt={2}>
+        {data.payment_methods.map(method =>
+          <HStack alignItems='center'>
+          <Icon as={MaterialCommunityIcons} name='cash-multiple' size={4} color='gray.2' mr={2}/>
+          <Text fontFamily='body' textTransform='capitalize' fontSize='sm' color='gray.2'>
+            {method}
+          </Text>
+          </HStack>
+        )}
+        </VStack>
 
 
       </ScrollView>
@@ -100,6 +153,7 @@ export function PreviewAnnounce() {
         name='Announce'
         bg='blue_secondary'
         textColor='gray.7'
+        onPress={handleAnnounce}
         />
       </HStack>
     </VStack>
