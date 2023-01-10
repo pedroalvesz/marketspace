@@ -1,23 +1,39 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { HStack, Icon, VStack, IconButton, Heading, Text, Select, FlatList } from "native-base";
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import {AntDesign} from '@expo/vector-icons'
 
 
 import { ProductCard } from "../components/ProductCard";
 import { AppNavigationRouteProps } from "../routes/app.routes";
+import { api } from "../services/api";
+import { UserAnnounceDTO } from "../dtos/UserAnnounceDTO";
 
 
 export function MyAnnounces() {
 
   const [selectFilter, setSelectFilter] = useState('')
-  const [Products, setProducts] = useState(['1','2','3','4','5','6'])
+  const [userProducts, setUserProducts] = useState<UserAnnounceDTO[]>([])
 
   const navigation = useNavigation<AppNavigationRouteProps>()
 
   function handleMyAnnouncesDetails() {
     navigation.navigate('myAnnounceDetails')
   }
+
+  async function fetchUserAnnounces() {
+    try {
+      const {data} = await api.get('/users/products')
+
+      setUserProducts(data)
+    } catch (error) {
+      
+    }
+  }
+
+  useFocusEffect(useCallback(() => {
+    fetchUserAnnounces()
+  },[]))
 
   return(
     <VStack flex={1} bg='gray.6' pt={16} px={6}>
@@ -48,13 +64,19 @@ export function MyAnnounces() {
       </HStack>
 
       <FlatList
-      data={Products}
-      keyExtractor={item => item}
+      data={userProducts}
+      keyExtractor={item => item.id}
       numColumns={2}
       columnWrapperStyle={{justifyContent: 'space-between'}}
       contentContainerStyle={{paddingBottom: 92}}
       showsVerticalScrollIndicator={false}
-      renderItem={item => <ProductCard onPress={handleMyAnnouncesDetails}/>}
+      renderItem={({item}) => <ProductCard
+        onPress={handleMyAnnouncesDetails}
+        image={item.product_images[0].path}
+        name={item.name}
+        price={item.price}
+        is_new={item.is_new}
+        />}
       />
     </VStack>
   )

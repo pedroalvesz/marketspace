@@ -1,15 +1,22 @@
 import { HStack, Image, Text, VStack } from "native-base";
 import { TouchableOpacity, TouchableOpacityProps } from "react-native";
+import { api } from "../services/api";
 import { UserPhoto } from "./UserPhoto";
 
+type Props = TouchableOpacityProps & {
+  name: string,
+  price: number,
+  is_new: boolean,
+  image?: string,
+}
 
-export function ProductCard({...rest} : TouchableOpacityProps) {
+export function ProductCard({name, price, is_new, image, ...rest} : Props) {
   return(
     <TouchableOpacity {...rest} >
     <VStack maxW='155px' mb={6}>
       <VStack>
         <Image
-        source={require('../assets/product.png')}
+        source={image ? {uri : `${api.defaults.baseURL}/images/${image}`} : require('../assets/product.png')}
         h='100px'
         w='150px'
         rounded='md'
@@ -33,17 +40,17 @@ export function ProductCard({...rest} : TouchableOpacityProps) {
         top={1}
         >
           <Text fontFamily='heading' fontSize='sm' textTransform='uppercase' color='white'>
-            Novo
+            {is_new ? 'New' : 'Used'}
           </Text>
         </HStack>
         
       </VStack>
 
       <Text fontFamily='body' fontSize='sm' color='gray.2'>
-        Red Sneakers
+        {name}
       </Text>
       <Text fontFamily='heading' fontSize='md' color='gray.1'>
-        R$ 100,00
+        R$ {price}
       </Text>
     </VStack>
     </TouchableOpacity>
