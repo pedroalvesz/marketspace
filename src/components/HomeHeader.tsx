@@ -25,7 +25,7 @@ export function HomeHeader({name, avatar} : Props) {
 
       <HStack>
         <UserPhoto
-        //source={{uri: `${api.defaults.baseURL}/avatar/${avatar}`}}
+        source={{uri: `${api.defaults.baseURL}/images/${avatar}`}}
         size={12}
         />
 

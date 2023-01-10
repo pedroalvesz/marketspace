@@ -7,7 +7,7 @@ import { useTheme } from 'native-base'
 import { Octicons, Feather } from '@expo/vector-icons'
 
 import { Dashboard } from '../screens/Dashboard'
-import { MyAnnounces } from '../screens/MyAnnounces'
+import { UserAnnounces } from '../screens/UserAnnounces'
 
 type HomeTabRoutes = {
   home: undefined
@@ -46,7 +46,7 @@ export function HomeTabs() {
       />
       <Screen
         name="userAnnounces"
-        component={MyAnnounces}
+        component={UserAnnounces}
         options={{
           tabBarIcon: ({ color }) => (
             <Feather name="tag" size={ICON_SIZE} color={color} />

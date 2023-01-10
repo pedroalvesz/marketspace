@@ -1,10 +1,17 @@
 import { Image } from 'native-base'
-import {useState} from 'react'
 import { Dimensions } from 'react-native'
 import Carousel from 'react-native-reanimated-carousel'
+import { api } from '../services/api'
+
+
+type imageProps = {
+  path: string,
+  id: string
+}
+
 
 type Props = {
-  images: string[],
+  images: imageProps[] | string[],
 }
 
 export function ImagesCarousel({images} : Props) {
@@ -22,12 +29,10 @@ export function ImagesCarousel({images} : Props) {
             <Image
               w={375}
               h={280}
-              bgColor="gray.7"
+              bgColor='gray.7'
               alignItems="center"
               justifyContent="center"
-              source={{
-                uri: item
-              }}
+              source={{uri : item.path ? `${api.defaults.baseURL}/images/${item.path}` : item}}
               alt="selected product details"
             />
         )}

@@ -1,16 +1,25 @@
 import { Heading, HStack, Icon, IconButton, ScrollView, Text, VStack } from "native-base";
-import {useNavigation} from '@react-navigation/native'
-import {Feather} from '@expo/vector-icons'
-import { AppNavigationRouteProps } from "../routes/app.routes";
+import {useNavigation, useRoute} from '@react-navigation/native'
+import {Feather, MaterialCommunityIcons} from '@expo/vector-icons'
+
 import { ImagesCarousel } from "../components/ImageCarousel";
+import { CustomButton } from "../components/CustomButton";
 import { UserPhoto } from "../components/UserPhoto";
 import { Tag } from "../components/Tag";
-import { CustomButton } from "../components/CustomButton";
+
+import { AppNavigationRouteProps } from "../routes/app.routes";
+import { UserAnnounceDTO } from "../dtos/UserAnnounceDTO";
+import { useAuth } from "../hooks/useAuth";
+import { api } from "../services/api";
 
 
-export function MyAnnounceDetails() {
+export function UserAnnounceDetails() {
 
   const navigation = useNavigation<AppNavigationRouteProps>()
+  const {user} = useAuth()
+
+  const route = useRoute()
+  const product = route.params as UserAnnounceDTO
 
   function handleGoBack() {
     navigation.goBack()
@@ -39,24 +48,26 @@ export function MyAnnounceDetails() {
         />
       </HStack>
       
-      <ImagesCarousel/>
+      <ImagesCarousel images={product.product_images}/>
 
-      <ScrollView flex={1} px={6} py={5}>
+      <ScrollView flex={1} px={6} py={5} showsVerticalScrollIndicator={false} contentContainerStyle={{paddingBottom: 128}}>
         <HStack alignItems='center' mb={6}>
-          <UserPhoto/>
+          <UserPhoto
+          source={{uri: `${api.defaults.baseURL}/images/${user.avatar}`}}
+          />
           <Text fontFamily="body" fontSize="sm" color="gray.1" ml={2}>
-            User Name
+            {user.name}
           </Text>
         </HStack>
 
         <Tag
-        name='new'
+        name={product.is_new ? 'new' : 'used'}
         isActive={false}
         />
 
         <HStack justifyContent='space-between' my={2}>
           <Heading fontFamily='heading' fontSize='xl' color='gray.1'>
-            Motorcycle
+            {product.name}
           </Heading>
 
           <HStack alignItems='center'>
@@ -65,13 +76,13 @@ export function MyAnnounceDetails() {
             </Text>
             
             <Text fontFamily='heading' fontSize='xl' color='blue_secondary'>
-            45,00
+            {product.price}
             </Text>
           </HStack>
         </HStack>
 
         <Text fontFamily='body' fontSize='sm' color='gray.2'>
-          Cras congue cursus in tortor sagittis placerat nunc, tellus arcu. Vitae ante leo eget maecenas urna mattis cursus.  
+          {product.description}  
         </Text>
 
         <HStack alignItems='center' mt={6} mb={4}>
@@ -80,7 +91,7 @@ export function MyAnnounceDetails() {
           </Text>
 
           <Text fontFamily='body' fontSize='sm' color='gray.2'>
-            No.
+            {product.accept_trade ? 'Yes.' : 'No.'}
           </Text>
         </HStack>
 
@@ -88,7 +99,19 @@ export function MyAnnounceDetails() {
             Payment Methods:
         </Text>
 
-        <VStack alignItems='center' space={2}>
+        <VStack mt={2} mb={12}>
+        {product.payment_methods.map(method =>
+          <HStack alignItems='center'>
+          <Icon as={MaterialCommunityIcons} name='cash-multiple' size={4} color='gray.2' mr={2}/>
+          <Text fontFamily='body' textTransform='capitalize' fontSize='sm' color='gray.2'>
+            {method.name}
+          </Text>
+          </HStack>
+        )}
+        </VStack>
+
+      </ScrollView>
+      <VStack bg='white' alignItems='center' position='absolute' w='100%' h='125px' bottom={0} pt={2} pb={6} space={2}>
         <CustomButton
           name='Unable Announce'
           bg='gray.1'
@@ -104,7 +127,6 @@ export function MyAnnounceDetails() {
           isBig
           />
         </VStack>
-      </ScrollView>
     </VStack>
   )
 }

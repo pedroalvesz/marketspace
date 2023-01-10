@@ -8,18 +8,25 @@ import { ProductCard } from "../components/ProductCard";
 import { AppNavigationRouteProps } from "../routes/app.routes";
 import { api } from "../services/api";
 import { UserAnnounceDTO } from "../dtos/UserAnnounceDTO";
+import { useAuth } from "../hooks/useAuth";
 
 
-export function MyAnnounces() {
+export function UserAnnounces() {
 
   const [selectFilter, setSelectFilter] = useState('')
   const [userProducts, setUserProducts] = useState<UserAnnounceDTO[]>([])
 
+  const {user} = useAuth()
   const navigation = useNavigation<AppNavigationRouteProps>()
 
-  function handleMyAnnouncesDetails() {
-    navigation.navigate('myAnnounceDetails')
+  function handleCreateAnnounce() {
+    navigation.navigate('createAnnounce')
   }
+
+  function handleUserAnnounceDetails(item : UserAnnounceDTO) {
+    navigation.navigate('userAnnounceDetails', item)
+  }
+
 
   async function fetchUserAnnounces() {
     try {
@@ -47,13 +54,14 @@ export function MyAnnounces() {
           name='plus'
           size={7}
           color='gray.1'
+          onPress={handleCreateAnnounce}
           />}
         />
       </HStack>
 
       <HStack alignItems='center' justifyContent='space-between' mb={5}>
         <Text fontFamily='body' fontSize='sm' color='gray.2'>
-          9 announces
+          {userProducts.length} announces
         </Text>
         
         <Select placeholder="All" selectedValue={selectFilter} onValueChange={itemValue => setSelectFilter(itemValue)} minW='110px'>
@@ -71,8 +79,9 @@ export function MyAnnounces() {
       contentContainerStyle={{paddingBottom: 92}}
       showsVerticalScrollIndicator={false}
       renderItem={({item}) => <ProductCard
-        onPress={handleMyAnnouncesDetails}
+        onPress={() => handleUserAnnounceDetails(item)}
         image={item.product_images[0].path}
+        avatar={user.avatar}
         name={item.name}
         price={item.price}
         is_new={item.is_new}

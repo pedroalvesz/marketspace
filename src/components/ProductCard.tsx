@@ -5,12 +5,13 @@ import { UserPhoto } from "./UserPhoto";
 
 type Props = TouchableOpacityProps & {
   name: string,
+  avatar: string,
   price: number,
   is_new: boolean,
   image?: string,
 }
 
-export function ProductCard({name, price, is_new, image, ...rest} : Props) {
+export function ProductCard({name, avatar, price, is_new, image, ...rest} : Props) {
   return(
     <TouchableOpacity {...rest} >
     <VStack maxW='155px' mb={6}>
@@ -24,6 +25,7 @@ export function ProductCard({name, price, is_new, image, ...rest} : Props) {
         />
 
         <UserPhoto
+        source={{uri: `${api.defaults.baseURL}/images/${avatar}`}}
         borderColor='gray.7'
         position='absolute'
         top={1}
@@ -32,7 +34,7 @@ export function ProductCard({name, price, is_new, image, ...rest} : Props) {
         />
 
         <HStack
-        bg='blue_primary'
+        bg={is_new ? 'blue_primary' : 'gray.5'}
         rounded='full'
         position='absolute'
         px={2}
