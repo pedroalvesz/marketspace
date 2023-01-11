@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Heading, HStack, Icon, IconButton, ScrollView, Text, VStack } from "native-base";
 import {useNavigation, useRoute} from '@react-navigation/native'
 import {Feather, MaterialCommunityIcons} from '@expo/vector-icons'
@@ -15,14 +16,48 @@ import { api } from "../services/api";
 
 export function UserAnnounceDetails() {
 
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [isUpdating, setIsUpdating] = useState(false)
+
   const navigation = useNavigation<AppNavigationRouteProps>()
-  const {user} = useAuth()
+  const {user, ErrorToast} = useAuth()
 
   const route = useRoute()
   const product = route.params as UserAnnounceDTO
 
   function handleGoBack() {
     navigation.goBack()
+  }
+
+  async function handleEnableOrDisableAnnounce() {
+    try {
+      setIsUpdating(true)
+      
+      const data = {
+        is_active : !product.is_active
+      }
+
+      await api.patch(`/products/${product.id}`, data)
+
+    } catch (error) {
+      ErrorToast(user)
+    } finally {
+      setIsUpdating(false)
+      handleGoBack()
+    }
+  }
+
+  async function handleRemoveAnnounce() {
+    try {
+      setIsDeleting(true)
+
+      await api.delete(`/products/${product.id}`)
+    } catch (error) {
+      ErrorToast(user)
+    } finally {
+      setIsDeleting(false)
+      handleGoBack()
+    }
   }
 
   return(
@@ -101,9 +136,9 @@ export function UserAnnounceDetails() {
 
         <VStack mt={2} mb={12}>
         {product.payment_methods.map(method =>
-          <HStack alignItems='center'>
-          <Icon as={MaterialCommunityIcons} name='cash-multiple' size={4} color='gray.2' mr={2} key={method.key}/>
-          <Text fontFamily='body' textTransform='capitalize' fontSize='sm' color='gray.2' key={method.name}>
+          <HStack alignItems='center' key={method.key}>
+          <Icon as={MaterialCommunityIcons} name='cash-multiple' size={4} color='gray.2' mr={2} />
+          <Text fontFamily='body' textTransform='capitalize' fontSize='sm' color='gray.2'>
             {method.name}
           </Text>
           </HStack>
@@ -113,18 +148,23 @@ export function UserAnnounceDetails() {
       </ScrollView>
       <VStack bg='white' alignItems='center' position='absolute' w='100%' h='125px' bottom={0} pt={2} pb={6} space={2}>
         <CustomButton
-          name='Unable Announce'
+          name={product.is_active ? 'Disable Announce' : 'Enable Announce'}
           bg='gray.1'
-          color='gray.7'
           isBig
+          leftIcon={<Icon as={Feather} name='power'/>}
+          isLoading={isUpdating}
+          onPress={handleEnableOrDisableAnnounce}
           />
 
           <CustomButton
           name='Delete Announce'
           bg='gray.5'
-          color='gray.2'
-          mb={2}
+          textColor='gray.1'
           isBig
+          mb={2}
+          leftIcon={<Icon as={Feather} name='trash' color='gray.1'/>}
+          isLoading={isDeleting}
+          onPress={handleRemoveAnnounce}
           />
         </VStack>
     </VStack>

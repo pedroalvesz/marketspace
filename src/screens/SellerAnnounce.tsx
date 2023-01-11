@@ -123,9 +123,9 @@ export function SellerAnnounce() {
 
         <VStack mt={2} mb={12}>
         {product.payment_methods.map(method =>
-          <HStack alignItems='center'>
-          <Icon as={MaterialCommunityIcons} name='cash-multiple' size={4} color='gray.2' mr={2} key={method.key}/>
-          <Text fontFamily='body' textTransform='capitalize' fontSize='sm' color='gray.2' key={method.name}>
+          <HStack alignItems='center' key={method.key}>
+          <Icon as={MaterialCommunityIcons} name='cash-multiple' size={4} color='gray.2' mr={2}/>
+          <Text fontFamily='body' textTransform='capitalize' fontSize='sm' color='gray.2'>
             {method.name}
           </Text>
           </HStack>

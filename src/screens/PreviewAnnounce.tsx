@@ -59,7 +59,8 @@ export function PreviewAnnounce() {
       })
   
       await api.post('/products/images/', imageData, {headers: {'Content-Type' : 'multipart/form-data'}})
-  
+
+      navigation.navigate('hometabs')
     } catch (error) {
       throw error
     }
@@ -128,7 +129,7 @@ export function PreviewAnnounce() {
         
         <VStack mt={2}>
         {data.payment_methods.map(method =>
-          <HStack alignItems='center'>
+          <HStack alignItems='center' key={method}>
           <Icon as={MaterialCommunityIcons} name='cash-multiple' size={4} color='gray.2' mr={2}/>
           <Text fontFamily='body' textTransform='capitalize' fontSize='sm' color='gray.2'>
             {method}

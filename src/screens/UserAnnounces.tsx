@@ -80,8 +80,8 @@ export function UserAnnounces() {
       showsVerticalScrollIndicator={false}
       renderItem={({item}) => <ProductCard
         onPress={() => handleUserAnnounceDetails(item)}
+        is_active={item.is_active}
         image={item.product_images[0].path}
-        avatar={user.avatar}
         name={item.name}
         price={item.price}
         is_new={item.is_new}
