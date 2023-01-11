@@ -10,10 +10,11 @@ import { SellerAnnounce } from '../screens/SellerAnnounce';
 
 import { CreateAnnounceDTO } from '../dtos/CreateAnnounceDTO';
 import { UserAnnounceDTO } from '../dtos/UserAnnounceDTO';
+import { onSaleProductDTO } from '../dtos/onSaleProductDTO';
 
 type AppRoutes = {
   hometabs: undefined;
-  sellerAnnoune: undefined;
+  sellerAnnoune: {id: string};
   createAnnounce: undefined;
   userAnnounceDetails: UserAnnounceDTO;
   editAnnounce: undefined;

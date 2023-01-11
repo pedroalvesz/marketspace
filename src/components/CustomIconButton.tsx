@@ -5,7 +5,7 @@ type ButtonProps = IButtonProps & {
   textColor?: string;
 }
 
-export function IconButton({name, textColor = 'white', ...rest} : ButtonProps) {
+export function CustomIconButton({name, textColor = 'white', ...rest} : ButtonProps) {
   return(
     <Button
     p={3}

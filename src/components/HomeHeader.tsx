@@ -2,10 +2,11 @@ import { HStack, Icon, Image, Text, VStack } from "native-base";
 import {useNavigation} from '@react-navigation/native'
 import { FontAwesome5 } from '@expo/vector-icons'; 
 
-import { IconButton } from "./IconButton";
+import { CustomIconButton } from "./CustomIconButton";
 import { AppNavigationRouteProps } from "../routes/app.routes";
 import { UserPhoto } from "./UserPhoto";
 import { api } from "../services/api";
+
 
 
 type Props = {
@@ -39,7 +40,7 @@ export function HomeHeader({name, avatar} : Props) {
         </VStack>
       </HStack>
 
-      <IconButton
+      <CustomIconButton
         name='Announce'
         bg='gray.1'
         textColor='gray.7'

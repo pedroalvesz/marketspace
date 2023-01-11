@@ -16,13 +16,17 @@ import { HomeTabNavigationRouteProps } from '../routes/hometab.routes'
 import { AppNavigationRouteProps } from '../routes/app.routes'
 import { api } from '../services/api'
 import { useAuth } from '../hooks/useAuth'
+import { Loading } from '../components/Loading'
+import { onSaleProductDTO } from '../dtos/onSaleProductDTO'
 
 
 
 export function Dashboard() {
   const {user, ErrorToast} = useAuth()
   const [userProducts, setUserProducts] = useState([])
-  const [Products, setProducts] = useState([])
+  const [Products, setProducts] = useState<onSaleProductDTO[]>([])
+
+  const [isLoading, setIsLoading] = useState(true)
 
   const tabNavigation = useNavigation<HomeTabNavigationRouteProps>()
   const stackNavigation = useNavigation<AppNavigationRouteProps>()
@@ -35,8 +39,8 @@ export function Dashboard() {
     tabNavigation.navigate('userAnnounces')
   }
 
-  function HandleOpenSellerAnnounce() {
-    stackNavigation.navigate('sellerAnnoune')
+  function handleOpenOnSaleProduct(id: string) {
+    stackNavigation.navigate('sellerAnnoune', { id })
   }
 
   function handleModal() {
@@ -51,10 +55,11 @@ export function Dashboard() {
       setUserProducts(data)
     } catch (error) {
       ErrorToast(error)
-    }
+    } 
   }
 
   async function fetchProducts() {
+
     try {
       const { data } = await api.get('/products')
 
@@ -62,6 +67,8 @@ export function Dashboard() {
       console.log('all products',data)
     } catch (error) {
       ErrorToast(error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -76,6 +83,12 @@ export function Dashboard() {
 
   return (
     <VStack flex={1} bg="gray.6" pt={16} px={6}>
+     {
+      isLoading
+      ?
+      <Loading/>
+      :
+      <>
       <HomeHeader name={user.name} avatar={user.avatar} />
 
       <Text fontFamily="body" fontSize="sm" color="gray.3" mb={3}>
@@ -94,12 +107,19 @@ export function Dashboard() {
 
       <FlatList
         data={Products}
-        keyExtractor={item => item}
+        keyExtractor={item => item.id}
         numColumns={2}
         columnWrapperStyle={{ justifyContent: 'space-between' }}
         contentContainerStyle={{ paddingBottom: 92 }}
         showsVerticalScrollIndicator={false}
-        renderItem={item => <ProductCard onPress={HandleOpenSellerAnnounce}/>}
+        renderItem={({item}) => <ProductCard
+         onPress={() => handleOpenOnSaleProduct(item.id)}
+         name={item.name}
+         avatar={item.user.avatar}
+         price={item.price}
+         is_new={item.is_new}
+         image={item.product_images[0].path}
+         />}
       />
 
       <BottomSheet
@@ -110,6 +130,8 @@ export function Dashboard() {
       >
         <FilterModal/>
       </BottomSheet>
+      </>
+     }
     </VStack>
   )
 }
