@@ -9,19 +9,20 @@ import {
   VStack
 } from 'native-base'
 import { useNavigation } from '@react-navigation/native'
-import { CustomButton } from '../components/CustomButton'
 
 import {Feather} from '@expo/vector-icons'
+
 import {useForm, Controller} from 'react-hook-form'
 import {yupResolver} from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
+import { CustomButton } from '../components/CustomButton'
+import { FormInput } from '../components/Input'
 import LogoSvg from '../assets/logo.svg'
 import SubTitleSvg from '../assets/subtitle.svg'
-import { FormInput } from '../components/Input'
+
 import { AuthNavigationRouteProps } from '../routes/auth.routes'
 import { useAuth } from '../hooks/useAuth'
-
 
 type SignInProps = {
   email: string,
@@ -36,7 +37,7 @@ const SignInSchema = yup.object({
 
 export function SignIn() {
 
-  const {signIn} = useAuth()
+  const {signIn, ErrorToast} = useAuth()
   const [isPasswordHidden, setIsPasswordHidden] = useState(true)
 
   const navigation = useNavigation<AuthNavigationRouteProps>()
@@ -52,7 +53,7 @@ export function SignIn() {
     try {
       await signIn(email, password)
     } catch (error) {
-      
+      ErrorToast(error)
     }
   }
 

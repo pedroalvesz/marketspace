@@ -1,8 +1,13 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
+import { useToast } from "native-base";
+
+import { storageTokenGet, storageTokenRemove, storageTokenSave } from "../storage/StorageToken";
+import { storageUserGet, storageUserRemove, storageUserSave } from "../storage/StorageUser";
+
 import { UserDTO } from "../dtos/UserDTO";
 import { api } from "../services/api";
-import { storageTokenGet, storageTokenSave } from "../storage/StorageToken";
-import { storageUserGet, storageUserSave } from "../storage/StorageUser";
+import { AppError } from "../utils/AppError";
+
 
 
 export const AppContext = createContext<AppContextDataProps>({} as AppContextDataProps)
@@ -11,6 +16,8 @@ export const AppContext = createContext<AppContextDataProps>({} as AppContextDat
 
 export type AppContextDataProps = {
   signIn: (email: string, password: string) => Promise<void>,
+  signOut: () => Promise<void>,
+  ErrorToast: (error: any) => any,
   user: UserDTO,
 }
 
@@ -23,8 +30,21 @@ export function AppContextProvider({ children }: ProviderProps) {
 
   const [user, setUser] = useState<UserDTO>({} as UserDTO)
 
+  const toast = useToast()
 
 
+  function ErrorToast(error) {
+    const isAppError = error instanceof AppError
+    const title = isAppError ? error.message : 'Server Error. Please try again later.'
+
+    return(
+      toast.show({
+        title,
+        bg: 'red.500',
+        placement: 'top',
+      })
+    )
+  }
 
   async function userAndTokenSave(userData : UserDTO, token: string) {
     try {
@@ -61,6 +81,17 @@ export function AppContextProvider({ children }: ProviderProps) {
     }
   }
 
+  async function signOut() {
+    try {
+      await storageUserRemove()
+      await storageTokenRemove()
+
+      setUser({} as UserDTO)
+    } catch (error) {
+      throw error
+    }
+  }
+
   async function loadUserData() {
     try {
       const userLogged = await storageUserGet()
@@ -79,7 +110,7 @@ export function AppContextProvider({ children }: ProviderProps) {
   },[])
 
   return(
-    <AppContext.Provider value={{signIn, user}}>
+    <AppContext.Provider value={{signIn, user, signOut, ErrorToast}}>
       {children}
     </AppContext.Provider>
   )

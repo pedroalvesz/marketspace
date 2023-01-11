@@ -20,7 +20,7 @@ import { useAuth } from '../hooks/useAuth'
 
 
 export function Dashboard() {
-  const {user} = useAuth()
+  const {user, ErrorToast} = useAuth()
   const [userProducts, setUserProducts] = useState([])
   const [Products, setProducts] = useState([])
 
@@ -49,9 +49,8 @@ export function Dashboard() {
     try {
       const { data } = await api.get('/users/products')
       setUserProducts(data)
-      console.log('userproducts',data)
     } catch (error) {
-      
+      ErrorToast(error)
     }
   }
 
@@ -62,13 +61,13 @@ export function Dashboard() {
       setProducts(data)
       console.log('all products',data)
     } catch (error) {
-      console.log(error.message)
+      ErrorToast(error)
     }
   }
 
 
   useEffect(() => {
-    fetchUserProducts
+    fetchUserProducts()
   },[])
 
   useFocusEffect(useCallback(() => {

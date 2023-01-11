@@ -16,7 +16,7 @@ import { api } from "../services/api";
 
 export function PreviewAnnounce() {
 
-  const {user} = useAuth()
+  const {user, ErrorToast} = useAuth()
   const navigation = useNavigation<AppNavigationRouteProps>()
 
   const route = useRoute()
@@ -27,38 +27,42 @@ export function PreviewAnnounce() {
   }
 
   async function handleAnnounce() {
-
-    const {images, name, description, is_new, price, accept_trade, payment_methods} = data;
-    const response = await api.post('/products', {name, description, is_new, price, accept_trade, payment_methods});
-
-    console.log('Envio do Produto =>', response.data)
-    const {id} = response.data
-
-    await postImages(id, name, images)
+    try {
+      const {images, name, description, is_new, price, accept_trade, payment_methods} = data;
+      const response = await api.post('/products', {name, description, is_new, price, accept_trade, payment_methods});
+  
+      console.log('Envio do Produto =>', response.data)
+      const {id} = response.data
+  
+      await postImages(id, name, images)
+    } catch (error) {
+     ErrorToast(error) 
+    }
   }
 
 
   async function postImages(id: string, name: string, images: string[]) {
-
-    const imageData = new FormData()
-    imageData.append('product_id', id)
-
-    images.forEach((item) => {
-      const imageExtension = item.split('.').pop()
-
-      const imageFile = {
-        name: `${name}.${imageExtension}`,
-        uri: item,
-        type: `image/${imageExtension}`
-      } as any
-
-      imageData.append('images', imageFile)
-    })
-
-    const response = await api.post('/products/images/', imageData, {headers: {'Content-Type' : 'multipart/form-data'}})
-
-    console.log('Envio das Images =>',response.data)
-
+    try {
+      const imageData = new FormData()
+      imageData.append('product_id', id)
+  
+      images.forEach((item) => {
+        const imageExtension = item.split('.').pop()
+  
+        const imageFile = {
+          name: `${name}.${imageExtension}`,
+          uri: item,
+          type: `image/${imageExtension}`
+        } as any
+  
+        imageData.append('images', imageFile)
+      })
+  
+      await api.post('/products/images/', imageData, {headers: {'Content-Type' : 'multipart/form-data'}})
+  
+    } catch (error) {
+      throw error
+    }
   }
 
   return(

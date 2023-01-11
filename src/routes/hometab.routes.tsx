@@ -3,15 +3,17 @@ import {
   createBottomTabNavigator
 } from '@react-navigation/bottom-tabs'
 
-import { useTheme } from 'native-base'
-import { Octicons, Feather } from '@expo/vector-icons'
+import { useTheme, View } from 'native-base'
+import { Octicons, Feather, MaterialIcons } from '@expo/vector-icons'
 
 import { Dashboard } from '../screens/Dashboard'
 import { UserAnnounces } from '../screens/UserAnnounces'
+import { useAuth } from '../hooks/useAuth'
 
 type HomeTabRoutes = {
-  home: undefined
-  userAnnounces: undefined
+  home: undefined,
+  userAnnounces: undefined,
+  signOut: undefined,
 }
 
 export type HomeTabNavigationRouteProps = BottomTabNavigationProp<HomeTabRoutes>
@@ -19,6 +21,9 @@ export type HomeTabNavigationRouteProps = BottomTabNavigationProp<HomeTabRoutes>
 const { Screen, Navigator } = createBottomTabNavigator<HomeTabRoutes>()
 
 export function HomeTabs() {
+
+  const {signOut} = useAuth()
+
   const { colors, sizes } = useTheme()
   const ICON_SIZE = sizes[6]
 
@@ -52,6 +57,21 @@ export function HomeTabs() {
             <Feather name="tag" size={ICON_SIZE} color={color} />
           )
         }}
+      />
+      <Screen
+        name='signOut'
+        component={View}
+        options={{
+          tabBarIcon: () => (
+            <MaterialIcons name="logout" size={ICON_SIZE} color={colors.red[500]} />
+          )
+        }}
+        listeners={() => ({
+          tabPress: async () => {
+            await signOut()
+          }
+        })
+      }
       />
     </Navigator>
   )

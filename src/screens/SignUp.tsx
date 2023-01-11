@@ -51,7 +51,7 @@ const SignUpSchema = yup.object({
 
 export function SignUp() {
 
-  const { signIn } = useAuth()
+  const { signIn, ErrorToast } = useAuth()
   const [isPasswordHidden, setIsPasswordHidden] = useState(true)
   const [isConfirmHidden, setIsConfirmHidden] = useState(true)
   const [userPhoto, setUserPhoto] = useState('')
@@ -87,7 +87,7 @@ export function SignUp() {
       await signIn(email, password)
 
     } catch (error) {
-      console.log(error.message)
+      ErrorToast(error)
     }
   }
 
