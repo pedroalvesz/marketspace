@@ -40,24 +40,19 @@ export function PreviewAnnounce() {
 
   async function postImages(id: string, name: string, images: string[]) {
 
-    const imageFiles = []
-
-    for(let i = 0; i < images.length; i++ ) {
-      const imageExtension = images[i].split('.').pop()
-      const imageFile = {
-        name: `${name}.${imageExtension}`,
-        uri: images[i],
-        type: `image/${imageExtension}`
-      }
-      imageFiles.push(imageFile)
-    }
-
-
     const imageData = new FormData()
     imageData.append('product_id', id)
 
-    imageFiles.forEach((item) => {
-      imageData.append('images', item)
+    images.forEach((item) => {
+      const imageExtension = item.split('.').pop()
+
+      const imageFile = {
+        name: `${name}.${imageExtension}`,
+        uri: item,
+        type: `image/${imageExtension}`
+      } as any
+
+      imageData.append('images', imageFile)
     })
 
     const response = await api.post('/products/images/', imageData, {headers: {'Content-Type' : 'multipart/form-data'}})

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Switch, TouchableOpacity } from "react-native";
-import { Heading, HStack, VStack, IconButton, Icon, Text, Center, ScrollView, Radio, useTheme, Checkbox, Image} from "native-base";
+import { Heading, HStack, VStack, IconButton, Icon, Text, Center, ScrollView, Radio, useTheme, Checkbox, Image, useToast} from "native-base";
 import {useNavigation} from '@react-navigation/native'
 import * as ImagePicker from 'expo-image-picker'
 import {Feather, FontAwesome5} from '@expo/vector-icons'
@@ -28,6 +28,7 @@ export function CreateAnnounce() {
 
   const { colors } = useTheme()
   const navigation = useNavigation<AppNavigationRouteProps>()
+  const toast = useToast()
 
 
   function handleGoBack() {
@@ -57,6 +58,16 @@ export function CreateAnnounce() {
   }
 
   function handlePreview() {
+
+    if(images.length === 0 || paymentMethods.length === 0 || title.trim() === '' || description.trim() === '' || price.trim() === '') {
+      return toast.show({
+        title: 'Please fill out all fields.',
+        bg: 'yellow.400',
+        placement: 'top',
+        mx: 4,
+      })
+    }
+
     const data = {
       images,
       name : title,
