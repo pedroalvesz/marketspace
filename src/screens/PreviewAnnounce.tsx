@@ -20,10 +20,11 @@ export function PreviewAnnounce() {
   const navigation = useNavigation<AppNavigationRouteProps>()
 
   const route = useRoute()
-  const {data} = route.params as CreateAnnounceDTO
+  const {data} = route.params as CreateAnnounceDTO 
 
   function handleGoBack() {
     navigation.goBack()
+    console.log(data.images)
   }
 
   async function handleAnnounce() {
@@ -80,7 +81,7 @@ export function PreviewAnnounce() {
 
       <ImagesCarousel images={data.images}/>
 
-      <ScrollView flex={1} px={6} py={5}>
+      <ScrollView flex={1} px={6} py={5} showsVerticalScrollIndicator={false} contentContainerStyle={{paddingBottom: 128}}>
         <HStack alignItems='center' mb={6}>
           <UserPhoto/>
           <Text fontFamily="body" fontSize="sm" color="gray.1" ml={2}>

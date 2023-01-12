@@ -29,6 +29,10 @@ export function UserAnnounceDetails() {
     navigation.goBack()
   }
 
+  function handleEditAnnounce() {
+    navigation.navigate('editAnnounce', product)
+  }
+
   async function handleEnableOrDisableAnnounce() {
     try {
       setIsUpdating(true)
@@ -73,7 +77,7 @@ export function UserAnnounceDetails() {
           />}
         />
         <IconButton
-        onPress={handleGoBack}
+        onPress={handleEditAnnounce}
         icon={<Icon
           as={Feather}
           name='edit-3'

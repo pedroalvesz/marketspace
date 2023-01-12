@@ -7,18 +7,18 @@ import { CreateAnnounce } from '../screens/CreateAnnounce';
 import { UserAnnounceDetails } from '../screens/UserAnnounceDetails';
 import { PreviewAnnounce } from '../screens/PreviewAnnounce';
 import { SellerAnnounce } from '../screens/SellerAnnounce';
+import { EditAnnounce } from '../screens/EditAnnounce';
 
 import { CreateAnnounceDTO } from '../dtos/CreateAnnounceDTO';
 import { UserAnnounceDTO } from '../dtos/UserAnnounceDTO';
-import { onSaleProductDTO } from '../dtos/onSaleProductDTO';
 
 type AppRoutes = {
   hometabs: undefined;
   sellerAnnoune: {id: string};
   createAnnounce: undefined;
   userAnnounceDetails: UserAnnounceDTO;
-  editAnnounce: undefined;
-  previewAnnounce: CreateAnnounceDTO
+  previewAnnounce: CreateAnnounceDTO;
+  editAnnounce: UserAnnounceDTO;
 }
 
 export type AppNavigationRouteProps = StackNavigationProp<AppRoutes>
@@ -33,6 +33,7 @@ export function AppRoutes() {
       <Screen name='createAnnounce' component={CreateAnnounce}/>
       <Screen name='previewAnnounce' component={PreviewAnnounce} />
       <Screen name='userAnnounceDetails' component={UserAnnounceDetails}/>
+      <Screen name='editAnnounce' component={EditAnnounce}/>
     </Navigator>
   )
 }

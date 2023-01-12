@@ -1,7 +1,7 @@
 import { Box, Center, HStack, Image, Text, VStack } from "native-base";
 import { TouchableOpacity, TouchableOpacityProps } from "react-native";
-import { api } from "../services/api";
 import { UserPhoto } from "./UserPhoto";
+import { api } from "../services/api";
 
 type Props = TouchableOpacityProps & {
   name: string,

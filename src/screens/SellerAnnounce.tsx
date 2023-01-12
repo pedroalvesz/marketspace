@@ -72,7 +72,7 @@ export function SellerAnnounce() {
       
       <ImagesCarousel images={product.product_images}/>
 
-      <ScrollView flex={1} px={6} py={5}>
+      <ScrollView flex={1} px={6} py={5} showsVerticalScrollIndicator={false} contentContainerStyle={{paddingBottom: 128}}>
         <HStack alignItems='center' mb={6}>
           <UserPhoto
           source={{uri: `${api.defaults.baseURL}/images/${product.user.avatar}`}}
