@@ -31,8 +31,9 @@ export function Dashboard() {
   const [userProducts, setUserProducts] = useState([])
   const [Products, setProducts] = useState<onSaleProductDTO[]>([])
 
+  const [filterName, setFilterName] = useState('')
   const [isTradable, setIsTradable] = useState(true)
-  const [productUsage, setProductUsage] = useState('new')
+  const [isNew, setIsNew] = useState(true)
   const [paymentMethods, setPaymentMethods] = useState([])
 
 
@@ -51,10 +52,13 @@ export function Dashboard() {
     stackNavigation.navigate('sellerAnnoune', { id })
   }
 
-  function handleModal() {
+  function handleOpenModal() {
     bottomSheetRef.current?.expand()
   }
 
+  function handleCloseModal() {
+    bottomSheetRef.current?.close()
+  }
 
 
   async function fetchUserProducts() {
@@ -67,16 +71,57 @@ export function Dashboard() {
   }
 
   async function fetchProducts() {
-
     try {
       const { data } = await api.get('/products')
 
       setProducts(data)
-      //console.log('all products',data)
     } catch (error) {
       ErrorToast(error)
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  async function handleFilterProducts() {
+    try {
+      const params = {
+        query: filterName.trim() === '' ? null : filterName,
+        is_new: isNew,
+        accept_trade: isTradable,
+        payment_methods: paymentMethods,
+      }
+
+     const {data} = await api.get('/products', {params})
+
+      setProducts(data)
+
+    } catch (error) {
+      ErrorToast(error)
+    }
+  }
+  
+  async function handleFilterByName() {
+    try {
+      if(filterName.trim() === '') {
+        fetchProducts()
+      }
+      const {data} = await api.get('/products', {params : {query: filterName}})
+
+      setProducts(data)
+    } catch (error) {
+      ErrorToast(error)
+    }
+  }
+
+  async function handleResetFilters() {
+    try {
+      setIsNew(true)
+      setIsTradable(true)
+      setPaymentMethods([])
+
+      await fetchProducts()
+    } catch (error) {
+      ErrorToast(error)
     }
   }
 
@@ -110,7 +155,9 @@ export function Dashboard() {
       </Text>
 
       <SearchBar
-      rightElement={<Filters onPress={handleModal}/>}
+      value={filterName}
+      onChangeText={setFilterName}
+      rightElement={<Filters handleOpenModal={handleOpenModal} filter={handleFilterByName}/>}
       />
 
       <FlatList
@@ -143,6 +190,7 @@ export function Dashboard() {
           </Heading>
 
           <IconButton
+          onPress={handleCloseModal}
           icon={<Icon
             as={AntDesign}
             name='close'
@@ -159,13 +207,13 @@ export function Dashboard() {
           <HStack space={2} mb={6}>
             <Tag
             name='new'
-            isActive={productUsage === 'new'}
-            onPress={() => setProductUsage('new')}
+            isActive={isNew === true}
+            onPress={() => setIsNew(true)}
             />
             <Tag
             name='used'
-            isActive={productUsage === 'used'}
-            onPress={() => setProductUsage('used')}
+            isActive={isNew === false}
+            onPress={() => setIsNew(false)}
             />
           </HStack>
 
@@ -203,11 +251,13 @@ export function Dashboard() {
             name='Reset Filters'
             bg='gray.5'
             textColor='gray.2'
+            onPress={handleResetFilters}
             />
             <CustomButton
             name='Apply Filters'
             bg='gray.1'
             textColor='gray.7'
+            onPress={handleFilterProducts}
             />
           </HStack>
         </ScrollView>

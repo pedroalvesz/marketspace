@@ -2,10 +2,16 @@ import { Divider, Icon, IconButton, IIconButtonProps} from "native-base";
 import {Entypo, Feather} from '@expo/vector-icons'
 
 
-export function Filters({...rest} : IIconButtonProps) {
+type Props = IIconButtonProps & {
+  filter: () => Promise<void>;
+  handleOpenModal: () => void;
+}
+
+export function Filters({filter, handleOpenModal,...rest} : Props) {
   return(
     <>
     <IconButton
+    onPress={filter}
     icon={<Icon
       as={Entypo}
       name='magnifying-glass'
@@ -14,6 +20,7 @@ export function Filters({...rest} : IIconButtonProps) {
     />
     <Divider orientation="vertical" height='50%'/>
     <IconButton
+    onPress={handleOpenModal}
     icon={<Icon
       as={Feather}
       name='sliders'
