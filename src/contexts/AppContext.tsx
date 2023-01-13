@@ -19,6 +19,7 @@ export type AppContextDataProps = {
   signOut: () => Promise<void>,
   ErrorToast: (error: any) => any,
   user: UserDTO,
+  LoadingUserData: boolean,
 }
 
 
@@ -29,6 +30,7 @@ type ProviderProps = {
 export function AppContextProvider({ children }: ProviderProps) {
 
   const [user, setUser] = useState<UserDTO>({} as UserDTO)
+  const [LoadingUserData, setLoadingUserData] = useState(true)
 
   const toast = useToast()
 
@@ -102,6 +104,8 @@ export function AppContextProvider({ children }: ProviderProps) {
       }
     } catch (error) {
       
+    } finally {
+      setLoadingUserData(false)
     }
   }
 
@@ -110,7 +114,7 @@ export function AppContextProvider({ children }: ProviderProps) {
   },[])
 
   return(
-    <AppContext.Provider value={{signIn, user, signOut, ErrorToast}}>
+    <AppContext.Provider value={{signIn, user, signOut, ErrorToast, LoadingUserData}}>
       {children}
     </AppContext.Provider>
   )

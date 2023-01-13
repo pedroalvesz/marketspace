@@ -1,4 +1,4 @@
-import {Heading, HStack, Icon, ScrollView, Text, VStack } from "native-base";
+import {Heading, HStack, Icon, ScrollView, Text, useToast, VStack } from "native-base";
 import {useNavigation, useRoute} from '@react-navigation/native'
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -20,11 +20,12 @@ export function PreviewAnnounce() {
   const navigation = useNavigation<AppNavigationRouteProps>()
 
   const route = useRoute()
-  const {data} = route.params as CreateAnnounceDTO 
+  const {data} = route.params as CreateAnnounceDTO
+  
+  const toast = useToast()
 
   function handleGoBack() {
     navigation.goBack()
-    console.log(data.images)
   }
 
   async function handleAnnounce() {
@@ -36,6 +37,15 @@ export function PreviewAnnounce() {
       const {id} = response.data
   
       await postImages(id, name, images)
+
+      navigation.navigate('hometabs')
+      toast.show({
+        title: 'Announce created successfully!',
+        bg: 'blue_primary',
+        placement: 'top',
+        mx: 4
+      })
+      
     } catch (error) {
      ErrorToast(error) 
     }
@@ -61,7 +71,6 @@ export function PreviewAnnounce() {
   
       await api.post('/products/images/', imageData, {headers: {'Content-Type' : 'multipart/form-data'}})
 
-      navigation.navigate('hometabs')
     } catch (error) {
       throw error
     }

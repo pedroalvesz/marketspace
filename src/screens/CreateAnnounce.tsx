@@ -39,7 +39,12 @@ export function CreateAnnounce() {
   async function handleAddImage() {
 
     if(images.length >= 3) {
-      return console.log('já tem 3 imagens')
+      return toast.show({
+        title: 'Your product can only have 3 images.',
+        bg: 'yellow.500',
+        placement: 'top',
+        mx: 4
+      })
     }
 
     const ImageSelected = await ImagePicker.launchImageLibraryAsync({
@@ -64,7 +69,7 @@ export function CreateAnnounce() {
     if(images.length === 0 || paymentMethods.length === 0 || title.trim() === '' || description.trim() === '' || price.trim() === '') {
       return toast.show({
         title: 'Please fill out all fields.',
-        bg: 'yellow.400',
+        bg: 'yellow.500',
         placement: 'top',
         mx: 4,
       })

@@ -18,7 +18,7 @@ import { Tag } from '../components/Tag'
 import { HomeTabNavigationRouteProps } from '../routes/hometab.routes'
 import { AppNavigationRouteProps } from '../routes/app.routes'
 import { useAuth } from '../hooks/useAuth'
-
+import { useUserProducts } from '../hooks/useUserProducts'
 import { api } from '../services/api'
 import { onSaleProductDTO } from '../dtos/onSaleProductDTO'
 
@@ -26,9 +26,10 @@ import { onSaleProductDTO } from '../dtos/onSaleProductDTO'
 
 export function Dashboard() {
   const {user, ErrorToast} = useAuth()
+  const {products} = useUserProducts()
   const [isLoading, setIsLoading] = useState(true)
 
-  const [userProducts, setUserProducts] = useState([])
+  const [userProducts, setUserProducts] = useState(products)
   const [Products, setProducts] = useState<onSaleProductDTO[]>([])
 
   const [filterName, setFilterName] = useState('')
@@ -58,16 +59,6 @@ export function Dashboard() {
 
   function handleCloseModal() {
     bottomSheetRef.current?.close()
-  }
-
-
-  async function fetchUserProducts() {
-    try {
-      const { data } = await api.get('/users/products')
-      setUserProducts(data)
-    } catch (error) {
-      ErrorToast(error)
-    } 
   }
 
   async function fetchProducts() {
@@ -125,11 +116,6 @@ export function Dashboard() {
     }
   }
 
-
-  useEffect(() => {
-    fetchUserProducts()
-  },[])
-
   useFocusEffect(useCallback(() => {
     fetchProducts()
   },[]))
@@ -148,7 +134,7 @@ export function Dashboard() {
         Your on sale products
       </Text>
 
-      <UserProductsInfo quantity={userProducts.length} onPress={handleOpenUserAnnounces} />
+      <UserProductsInfo onPress={handleOpenUserAnnounces} />
 
       <Text fontFamily="body" fontSize="sm" color="gray.3" mb={3}>
         Products on sale

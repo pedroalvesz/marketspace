@@ -5,19 +5,21 @@ import {AntDesign} from '@expo/vector-icons'
 
 
 import { ProductCard } from "../components/ProductCard";
+
 import { AppNavigationRouteProps } from "../routes/app.routes";
-import { api } from "../services/api";
 import { UserAnnounceDTO } from "../dtos/UserAnnounceDTO";
-import { useAuth } from "../hooks/useAuth";
+import { api } from "../services/api";
 
 
 export function UserAnnounces() {
 
-  const [selectFilter, setSelectFilter] = useState('')
+  const [selectFilter, setSelectFilter] = useState('all')
   const [userProducts, setUserProducts] = useState<UserAnnounceDTO[]>([])
 
-  const {user} = useAuth()
   const navigation = useNavigation<AppNavigationRouteProps>()
+
+
+  const filteredProducts = handleFilterAnnounces(selectFilter)
 
   function handleCreateAnnounce() {
     navigation.navigate('createAnnounce')
@@ -27,12 +29,24 @@ export function UserAnnounces() {
     navigation.navigate('userAnnounceDetails', item)
   }
 
+  function handleFilterAnnounces(value: string) {
+    if(value === 'active') {
+      return userProducts.filter(({is_active}) => is_active === true )
+    }
+
+    if(value === 'inactive') {
+      return userProducts.filter(({is_active}) => is_active === false )
+    }
+
+    return userProducts;
+  }
 
   async function fetchUserAnnounces() {
     try {
       const {data} = await api.get('/users/products')
 
       setUserProducts(data)
+      return data
     } catch (error) {
       
     }
@@ -61,10 +75,10 @@ export function UserAnnounces() {
 
       <HStack alignItems='center' justifyContent='space-between' mb={5}>
         <Text fontFamily='body' fontSize='sm' color='gray.2'>
-          {userProducts.length} announces
+          {filteredProducts.length} announces
         </Text>
         
-        <Select placeholder="All" selectedValue={selectFilter} onValueChange={itemValue => setSelectFilter(itemValue)} minW='110px'>
+        <Select selectedValue={selectFilter} onValueChange={value => setSelectFilter(value)} minW='110px'>
           <Select.Item label='All' value='all'/>
           <Select.Item label='Active' value='active'/>
           <Select.Item label='Inactive' value='inactive'/>
@@ -72,7 +86,7 @@ export function UserAnnounces() {
       </HStack>
 
       <FlatList
-      data={userProducts}
+      data={filteredProducts}
       keyExtractor={item => item.id}
       numColumns={2}
       columnWrapperStyle={{justifyContent: 'space-between'}}
