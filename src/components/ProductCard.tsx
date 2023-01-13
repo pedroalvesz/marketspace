@@ -25,17 +25,14 @@ export function ProductCard({name, avatar, price, is_new, image, is_active = tru
           alt='Product Image'
           zIndex={-1}
           />
-          {
-            is_active
-            ?
-            null
-            :
+          {!is_active && (
             <>
             <Box bg='gray.1' h='100px' w='150px' rounded='md' position='absolute' opacity={0.3} zIndex={1}/>
             <Text fontFamily='heading' fontSize='sm' textTransform='uppercase' color='gray.7' position='absolute' bottom={0} zIndex={2} left={2}>
             DISABLED
             </Text>
             </>
+          )
           }
           
 

@@ -1,4 +1,5 @@
-import { useState, useRef, useMemo, useCallback, useEffect } from 'react'
+import { useState, useRef, useMemo, useCallback } from 'react'
+import { RefreshControl } from 'react-native'
 import { Checkbox, FlatList, Heading, HStack, Icon, IconButton, ScrollView, Switch, Text, VStack } from 'native-base'
 import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import {AntDesign} from '@expo/vector-icons'
@@ -14,6 +15,8 @@ import { Loading } from '../components/Loading'
 import { Filters } from '../components/Filters'
 import { Tag } from '../components/Tag'
 
+import LogoSvg from '../assets/logo.svg'
+
 
 import { HomeTabNavigationRouteProps } from '../routes/hometab.routes'
 import { AppNavigationRouteProps } from '../routes/app.routes'
@@ -21,13 +24,17 @@ import { useAuth } from '../hooks/useAuth'
 import { useUserProducts } from '../hooks/useUserProducts'
 import { api } from '../services/api'
 import { onSaleProductDTO } from '../dtos/onSaleProductDTO'
+import { SkeletonCard } from '../components/SkeletonCard'
 
 
 
 export function Dashboard() {
   const {user, ErrorToast} = useAuth()
   const {products} = useUserProducts()
+
   const [isLoading, setIsLoading] = useState(true)
+  const [loadingProducts, setLoadingProducts] = useState(true)
+  const [refreshing, setRefreshing] = useState(false)
 
   const [userProducts, setUserProducts] = useState(products)
   const [Products, setProducts] = useState<onSaleProductDTO[]>([])
@@ -49,8 +56,8 @@ export function Dashboard() {
     tabNavigation.navigate('userAnnounces')
   }
 
-  function handleOpenOnSaleProduct(id: string) {
-    stackNavigation.navigate('sellerAnnoune', { id })
+  function handleProductDetails(id: string) {
+    stackNavigation.navigate('announceDetails', { id })
   }
 
   function handleOpenModal() {
@@ -63,18 +70,21 @@ export function Dashboard() {
 
   async function fetchProducts() {
     try {
+      setLoadingProducts(true)
       const { data } = await api.get('/products')
 
       setProducts(data)
     } catch (error) {
       ErrorToast(error)
     } finally {
+      setLoadingProducts(false)
       setIsLoading(false)
     }
   }
 
   async function handleFilterProducts() {
     try {
+      handleCloseModal()
       const params = {
         query: filterName.trim() === '' ? null : filterName,
         is_new: isNew,
@@ -106,6 +116,7 @@ export function Dashboard() {
 
   async function handleResetFilters() {
     try {
+      setFilterName('')
       setIsNew(true)
       setIsTradable(true)
       setPaymentMethods([])
@@ -128,7 +139,7 @@ export function Dashboard() {
       <Loading/>
       :
       <>
-      <HomeHeader name={user.name} avatar={user.avatar} />
+      <HomeHeader/>
 
       <Text fontFamily="body" fontSize="sm" color="gray.3" mb={3}>
         Your on sale products
@@ -153,14 +164,31 @@ export function Dashboard() {
         columnWrapperStyle={{ justifyContent: 'space-between' }}
         contentContainerStyle={{ paddingBottom: 92 }}
         showsVerticalScrollIndicator={false}
-        renderItem={({item}) => <ProductCard
-         onPress={() => handleOpenOnSaleProduct(item.id)}
-         name={item.name}
-         avatar={item.user.avatar}
-         price={item.price}
-         is_new={item.is_new}
-         image={item.product_images[0].path}
-         />}
+        refreshControl={<RefreshControl size={1} refreshing={refreshing} onRefresh={handleResetFilters}/>}
+        renderItem={({item}) => {
+          if(!loadingProducts) {
+            return (
+              <ProductCard
+              onPress={() => handleProductDetails(item.id)}
+              name={item.name}
+              avatar={item.user.avatar}
+              price={item.price}
+              is_new={item.is_new}
+              image={item.product_images[0].path}
+              />
+            )
+          }
+          return <SkeletonCard/>
+        }
+        }
+         ListEmptyComponent={() => (
+          <VStack alignItems='center' justifyContent='center' flex={1} mt={16}>
+            <LogoSvg/>
+            <Text fontFamily='body' color='gray.4' fontSize='md'>
+              No announces found.
+            </Text>
+          </VStack>
+         )}
       />
 
       <BottomSheet

@@ -1,4 +1,4 @@
-import { HStack, Icon, Image, Text, VStack } from "native-base";
+import { HStack, Icon, Text, VStack } from "native-base";
 import {useNavigation} from '@react-navigation/native'
 import { FontAwesome5 } from '@expo/vector-icons'; 
 
@@ -6,27 +6,26 @@ import { CustomIconButton } from "./CustomIconButton";
 import { AppNavigationRouteProps } from "../routes/app.routes";
 import { UserPhoto } from "./UserPhoto";
 import { api } from "../services/api";
+import { useAuth } from "../hooks/useAuth";
 
 
 
-type Props = {
-  name: string,
-  avatar: string,
-}
+export function HomeHeader() {
 
-export function HomeHeader({name, avatar} : Props) {
-
+  const {user} = useAuth()
   const navigation = useNavigation<AppNavigationRouteProps>()
 
   function handleCreateAnnounce() {
     navigation.navigate('createAnnounce')
   }
+
+
   return(
     <HStack width='100%' justifyContent='space-between' alignItems='center' mb={6}>
 
       <HStack>
         <UserPhoto
-        source={{uri: `${api.defaults.baseURL}/images/${avatar}`}}
+        source={{uri: `${api.defaults.baseURL}/images/${user.avatar}`}}
         size={12}
         />
 
@@ -35,7 +34,7 @@ export function HomeHeader({name, avatar} : Props) {
             Welcome,
           </Text>
           <Text fontFamily='heading' fontSize='md' color='gray.1'>
-            {name}!
+            {user.name}!
           </Text>
         </VStack>
       </HStack>

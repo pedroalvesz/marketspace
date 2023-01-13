@@ -26,7 +26,7 @@ export function UserAnnounces() {
   }
 
   function handleUserAnnounceDetails(item : UserAnnounceDTO) {
-    navigation.navigate('userAnnounceDetails', item)
+    navigation.navigate('announceDetails', item)
   }
 
   function handleFilterAnnounces(value: string) {

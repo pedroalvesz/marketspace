@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Heading, HStack, Icon, IconButton, ScrollView, Text, VStack } from "native-base";
+import { Box, Heading, HStack, Icon, IconButton, ScrollView, Text, useToast, VStack } from "native-base";
 import {useNavigation, useRoute} from '@react-navigation/native'
 
 import {Feather, MaterialCommunityIcons, FontAwesome} from '@expo/vector-icons'
@@ -11,32 +11,41 @@ import { UserPhoto } from "../components/UserPhoto";
 import { Tag } from "../components/Tag";
 
 import { AppNavigationRouteProps } from "../routes/app.routes";
-import { onSaleDetailsDTO } from "../dtos/onSaleDetailsDTO";
 
 import { useAuth } from "../hooks/useAuth";
 import { api } from "../services/api";
+import { ProductDetailsDTO } from "../dtos/ProductDetails";
+import { CustomButton } from "../components/CustomButton";
+import { useUserProducts } from "../hooks/useUserProducts";
 
 
 type RouteParams = {
-  id: number
+  id: string;
 }
 
-export function SellerAnnounce() {
+export function AnnounceDetails() {
 
   const [isLoading, setIsLoading] = useState(true)
-  const [product, setProduct] = useState<onSaleDetailsDTO>({} as onSaleDetailsDTO)
+  const [isUpdating, setIsUpdating] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [product, setProduct] = useState<ProductDetailsDTO>({} as ProductDetailsDTO)
 
-  const {ErrorToast} = useAuth()
+  const {reloadProducts, removeProduct } = useUserProducts()
+  const {user, ErrorToast} = useAuth()
+
   const navigation = useNavigation<AppNavigationRouteProps>()
-
   const route = useRoute()
   const { id } = route.params as RouteParams
+
+  const toast = useToast()
+
+  const isMyProduct = product.user_id === user.id
 
   function handleGoBack() {
     navigation.goBack()
   }
 
-  async function getProductDetails() {
+  async function fetchProductDetails() {
     try {
       const { data } = await api.get(`/products/${id}`)
       setProduct(data)
@@ -47,8 +56,49 @@ export function SellerAnnounce() {
     }
   }
 
+  function handleEditAnnounce(){
+    navigation.navigate('editAnnounce', product)
+  }
+
+  async function handleRemoveAnnounce() {
+    try {
+      setIsDeleting(true)
+      await removeProduct(id)
+
+      handleGoBack()
+      toast.show({
+        title: 'Announce deleted successfully!',
+        bg: 'blue_primary',
+        placement: 'top',
+        mx: 4
+      })
+
+    } catch (error) {
+      ErrorToast(error)
+    } finally {
+      setIsDeleting(false)
+    }
+  }
+
+  async function handleEnableOrDisableAnnounce() {
+    try {
+      setIsUpdating(true)
+      
+      const data = {
+        is_active : !product.is_active
+      }
+
+      await api.patch(`/products/${product.id}`, data)
+      await reloadProducts()
+    } catch (error) {
+      ErrorToast(user)
+    } finally {
+      setIsUpdating(false)
+    }
+  }
+
   useEffect(() => {
-    getProductDetails()
+    fetchProductDetails()
   },[])
 
   return(
@@ -58,8 +108,8 @@ export function SellerAnnounce() {
       <Loading/>
       :
       <>
-      <HStack width='full' alignItems='center' justifyContent='space-between' px={6} mb={3}>
-        <IconButton
+     <HStack width='full' alignItems='center' justifyContent='space-between' px={6} mb={3}>
+      <IconButton
         onPress={handleGoBack}
         icon={<Icon
           as={Feather}
@@ -68,9 +118,31 @@ export function SellerAnnounce() {
           color='gray.1'
           />}
         />
+        {isMyProduct && (
+          <IconButton
+            onPress={handleEditAnnounce}
+            icon={<Icon
+              as={Feather}
+              name='edit-3'
+              size={7}
+              color='gray.1'
+              />}
+          />
+        )}
       </HStack>
-      
-      <ImagesCarousel images={product.product_images}/>
+
+      <VStack>
+        <ImagesCarousel images={product.product_images}/>
+        {!product.is_active && (
+          <VStack  h='100%' w='100%' justifyContent='center' alignItems='center' position='absolute' zIndex={1}>
+            <Box bg='gray.1' h='100%' w='100%' opacity={0.7} rounded='md'/>
+            <Text fontFamily='heading' fontSize='sm' color='gray.7' position='absolute' zIndex={2}>
+              DISABLED
+            </Text>
+          </VStack>
+         )
+        }
+      </VStack>
 
       <ScrollView flex={1} px={6} py={5} showsVerticalScrollIndicator={false} contentContainerStyle={{paddingBottom: 128}}>
         <HStack alignItems='center' mb={6}>
@@ -134,7 +206,31 @@ export function SellerAnnounce() {
 
 
       </ScrollView>
+      
+      {isMyProduct
+      ?
+      <VStack bg='white' alignItems='center' position='absolute' w='100%' h='125px' bottom={0} pt={2} pb={6} space={2}>
+        <CustomButton
+        name={product.is_active ? 'Disable Announce' : 'Enable Announce'}
+        bg={product.is_active ? 'gray.1' : 'blue_secondary'}
+        isBig
+        leftIcon={<Icon as={Feather} name='power'/>}
+        isLoading={isUpdating}
+        onPress={handleEnableOrDisableAnnounce}
+        />
 
+        <CustomButton
+        name='Delete Announce'
+        bg='gray.5'
+        textColor='gray.1'
+        isBig
+        mb={2}
+        leftIcon={<Icon as={Feather} name='trash' color='gray.1'/>}
+        isLoading={isDeleting}
+        onPress={handleRemoveAnnounce}
+        />
+      </VStack>
+      :
       <HStack bg='white' w='100%' position='absolute' bottom={0} h='90px' justifyContent='space-between' px={6} py={4} pb={6}>
         <HStack alignItems='center'>
           <Text fontFamily='heading' fontSize='sm' color='blue_secondary' mt={1} mr={2}>
@@ -153,6 +249,7 @@ export function SellerAnnounce() {
         textColor='gray.7'
         />
       </HStack>
+      }
       </>
       }
     </VStack>

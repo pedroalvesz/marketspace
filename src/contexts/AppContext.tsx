@@ -85,6 +85,7 @@ export function AppContextProvider({ children }: ProviderProps) {
 
   async function signOut() {
     try {
+
       await storageUserRemove()
       await storageTokenRemove()
 

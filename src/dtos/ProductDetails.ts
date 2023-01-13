@@ -1,5 +1,4 @@
-
-export type onSaleDetailsDTO = {
+export type ProductDetailsDTO = {
   id: string,
 	name: string,
 	description: string,
