@@ -11,7 +11,7 @@ import {
   Karla_700Bold
 } from '@expo-google-fonts/karla'
 import { Routes } from './src/routes'
-import { AppContextProvider } from './src/contexts/AppContext'
+import { AppContextProvider } from './src/contexts/AuthContext'
 
 export default function App() {
   LogBox.ignoreLogs([

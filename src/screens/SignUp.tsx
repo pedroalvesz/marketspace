@@ -28,6 +28,7 @@ import DefaultUserPhoto from '../assets/DefaultUserPhoto.png'
 
 import { api } from '../services/api'
 import { useAuth } from '../hooks/useAuth'
+import { ErrorToast } from '../utils/ErrorToast'
 
 
 type SignUpProps = {
@@ -51,7 +52,7 @@ const SignUpSchema = yup.object({
 
 export function SignUp() {
 
-  const { signIn, ErrorToast } = useAuth()
+  const {signIn} = useAuth()
   const [isPasswordHidden, setIsPasswordHidden] = useState(true)
   const [isConfirmHidden, setIsConfirmHidden] = useState(true)
   const [userPhoto, setUserPhoto] = useState('')

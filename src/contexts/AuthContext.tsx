@@ -6,8 +6,6 @@ import { storageUserGet, storageUserRemove, storageUserSave } from "../storage/S
 
 import { UserDTO } from "../dtos/UserDTO";
 import { api } from "../services/api";
-import { AppError } from "../utils/AppError";
-
 
 
 export const AppContext = createContext<AppContextDataProps>({} as AppContextDataProps)
@@ -17,7 +15,6 @@ export const AppContext = createContext<AppContextDataProps>({} as AppContextDat
 export type AppContextDataProps = {
   signIn: (email: string, password: string) => Promise<void>,
   signOut: () => Promise<void>,
-  ErrorToast: (error: any) => any,
   user: UserDTO,
   LoadingUserData: boolean,
 }
@@ -31,22 +28,6 @@ export function AppContextProvider({ children }: ProviderProps) {
 
   const [user, setUser] = useState<UserDTO>({} as UserDTO)
   const [LoadingUserData, setLoadingUserData] = useState(true)
-
-  const toast = useToast()
-
-
-  function ErrorToast(error) {
-    const isAppError = error instanceof AppError
-    const title = isAppError ? error.message : 'Server Error. Please try again later.'
-
-    return(
-      toast.show({
-        title,
-        bg: 'red.500',
-        placement: 'top',
-      })
-    )
-  }
 
   async function userAndTokenSave(userData : UserDTO, token: string) {
     try {
@@ -115,7 +96,7 @@ export function AppContextProvider({ children }: ProviderProps) {
   },[])
 
   return(
-    <AppContext.Provider value={{signIn, user, signOut, ErrorToast, LoadingUserData}}>
+    <AppContext.Provider value={{signIn, user, signOut, LoadingUserData}}>
       {children}
     </AppContext.Provider>
   )

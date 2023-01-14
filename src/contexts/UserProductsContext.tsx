@@ -9,7 +9,8 @@ import { CreateAnnounceDTO } from '../dtos/CreateAnnounceDTO'
 
 type UserProductsDataProps = {
   products: UserAnnounceDTO[];
-  removeProduct: (id: string) => Promise<void>;
+  removeAnnounce: (id: string) => Promise<void>;
+  createAnnounce: (product: CreateAnnounceDTO) => Promise<void>;
   editAnnounce: (product: CreateAnnounceDTO, productId: string, deletedImages: string[], oldImages: productImages[]) => Promise<void>;
   reloadProducts: () => Promise<void>;
   postImages: (id: string, images: string[]) => Promise<void>;
@@ -42,11 +43,25 @@ export function UserProductsProvider({children}: Props) {
     } 
   }
 
-  async function removeProduct(id: string) {
+  async function removeAnnounce(id: string) {
     try {
       await api.delete(`/products/${id}`)
     } catch (error) {
       console.log(error.message)
+    }
+  }
+
+  async function createAnnounce(product: CreateAnnounceDTO) {
+    try {
+      const {images, name, description, is_new, price, accept_trade, payment_methods} = product;
+      const response = await api.post('/products', {name, description, is_new, price, accept_trade, payment_methods});
+  
+      const {id} = response.data
+  
+      await postImages(id, images)
+      
+    } catch (error) {
+      throw error
     }
   }
 
@@ -127,7 +142,7 @@ export function UserProductsProvider({children}: Props) {
 
 
   return(
-    <UserProductsContext.Provider value={{products, removeProduct, editAnnounce, reloadProducts, postImages}}>
+    <UserProductsContext.Provider value={{products, removeAnnounce, createAnnounce, editAnnounce, reloadProducts, postImages}}>
       {children}
     </UserProductsContext.Provider>
   )

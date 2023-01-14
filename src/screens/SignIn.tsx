@@ -23,6 +23,7 @@ import SubTitleSvg from '../assets/subtitle.svg'
 
 import { AuthNavigationRouteProps } from '../routes/auth.routes'
 import { useAuth } from '../hooks/useAuth'
+import { ErrorToast } from '../utils/ErrorToast'
 
 type SignInProps = {
   email: string,
@@ -37,7 +38,7 @@ const SignInSchema = yup.object({
 
 export function SignIn() {
 
-  const {signIn, ErrorToast} = useAuth()
+  const {signIn} = useAuth()
   const [isPasswordHidden, setIsPasswordHidden] = useState(true)
 
   const navigation = useNavigation<AuthNavigationRouteProps>()

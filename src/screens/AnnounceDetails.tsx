@@ -6,17 +6,20 @@ import {Feather, MaterialCommunityIcons, FontAwesome} from '@expo/vector-icons'
 
 import { ImagesCarousel } from "../components/ImageCarousel";
 import { CustomIconButton } from "../components/CustomIconButton";
+import { CustomButton } from "../components/CustomButton";
 import { Loading } from "../components/Loading";
 import { UserPhoto } from "../components/UserPhoto";
 import { Tag } from "../components/Tag";
 
 import { AppNavigationRouteProps } from "../routes/app.routes";
 
-import { useAuth } from "../hooks/useAuth";
-import { api } from "../services/api";
-import { ProductDetailsDTO } from "../dtos/ProductDetails";
-import { CustomButton } from "../components/CustomButton";
 import { useUserProducts } from "../hooks/useUserProducts";
+import { useAuth } from "../hooks/useAuth";
+
+import { ProductDetailsDTO } from "../dtos/ProductDetails";
+import { api } from "../services/api";
+import { ErrorToast } from "../utils/ErrorToast";
+import { CustomToast } from "../utils/CustomToast";
 
 
 type RouteParams = {
@@ -30,8 +33,8 @@ export function AnnounceDetails() {
   const [isDeleting, setIsDeleting] = useState(false)
   const [product, setProduct] = useState<ProductDetailsDTO>({} as ProductDetailsDTO)
 
-  const {reloadProducts, removeProduct } = useUserProducts()
-  const {user, ErrorToast} = useAuth()
+  const {reloadProducts, removeAnnounce } = useUserProducts()
+  const {user} = useAuth()
 
   const navigation = useNavigation<AppNavigationRouteProps>()
   const route = useRoute()
@@ -63,16 +66,10 @@ export function AnnounceDetails() {
   async function handleRemoveAnnounce() {
     try {
       setIsDeleting(true)
-      await removeProduct(id)
+      await removeAnnounce(id)
 
       handleGoBack()
-      toast.show({
-        title: 'Announce deleted successfully!',
-        bg: 'blue_primary',
-        placement: 'top',
-        mx: 4
-      })
-
+      CustomToast('success', 'Announce deleted successfully!')
     } catch (error) {
       ErrorToast(error)
     } finally {
@@ -90,8 +87,9 @@ export function AnnounceDetails() {
 
       await api.patch(`/products/${product.id}`, data)
       await reloadProducts()
+      handleGoBack()
     } catch (error) {
-      ErrorToast(user)
+      ErrorToast(error)
     } finally {
       setIsUpdating(false)
     }

@@ -5,14 +5,17 @@ import {AntDesign} from '@expo/vector-icons'
 
 
 import { ProductCard } from "../components/ProductCard";
+import { SkeletonCard } from "../components/SkeletonCard";
 
 import { AppNavigationRouteProps } from "../routes/app.routes";
 import { UserAnnounceDTO } from "../dtos/UserAnnounceDTO";
 import { api } from "../services/api";
+import { ErrorToast } from "../utils/ErrorToast";
 
 
 export function UserAnnounces() {
 
+  const [loading, setLoading] = useState(true)
   const [selectFilter, setSelectFilter] = useState('all')
   const [userProducts, setUserProducts] = useState<UserAnnounceDTO[]>([])
 
@@ -48,7 +51,9 @@ export function UserAnnounces() {
       setUserProducts(data)
       return data
     } catch (error) {
-      
+      ErrorToast(error)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -92,14 +97,21 @@ export function UserAnnounces() {
       columnWrapperStyle={{justifyContent: 'space-between'}}
       contentContainerStyle={{paddingBottom: 92}}
       showsVerticalScrollIndicator={false}
-      renderItem={({item}) => <ProductCard
-        onPress={() => handleUserAnnounceDetails(item)}
-        is_active={item.is_active}
-        image={item.product_images[0].path}
-        name={item.name}
-        price={item.price}
-        is_new={item.is_new}
-        />}
+      renderItem={({item}) => {
+        if(!loading) {
+          return (
+            <ProductCard
+            onPress={() => handleUserAnnounceDetails(item)}
+            is_active={item.is_active}
+            image={item.product_images[0].path}
+            name={item.name}
+            price={item.price}
+            is_new={item.is_new}
+            />
+          )
+        }
+        return <SkeletonCard/>
+      }}
       />
     </VStack>
   )

@@ -1,4 +1,4 @@
-import {Heading, HStack, Icon, ScrollView, Text, useToast, VStack } from "native-base";
+import {Heading, HStack, Icon, ScrollView, Text, VStack } from "native-base";
 import {useNavigation, useRoute} from '@react-navigation/native'
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -9,22 +9,23 @@ import { UserPhoto } from "../components/UserPhoto";
 import { Tag } from "../components/Tag";
 
 import { AppNavigationRouteProps } from "../routes/app.routes";
-import { CreateAnnounceDTO } from "../dtos/CreateAnnounceDTO";
 import { useAuth } from "../hooks/useAuth";
-import { api } from "../services/api";
 import { useUserProducts } from "../hooks/useUserProducts";
+import { ErrorToast } from "../utils/ErrorToast";
+
+import { CreateAnnounceDTO } from "../dtos/CreateAnnounceDTO";
+import { CustomToast } from "../utils/CustomToast";
+
 
 
 export function PreviewAnnounce() {
 
-  const {user, ErrorToast} = useAuth()
-  const {postImages} = useUserProducts()
+  const {user} = useAuth()
+  const {createAnnounce} = useUserProducts()
   const navigation = useNavigation<AppNavigationRouteProps>()
 
   const route = useRoute()
-  const data = route.params as CreateAnnounceDTO
-  
-  const toast = useToast()
+  const product = route.params as CreateAnnounceDTO
 
   function handleGoBack() {
     navigation.goBack()
@@ -32,24 +33,13 @@ export function PreviewAnnounce() {
 
   async function handleAnnounce() {
     try {
-      const {images, name, description, is_new, price, accept_trade, payment_methods} = data;
-      const response = await api.post('/products', {name, description, is_new, price, accept_trade, payment_methods});
-  
-      console.log('Envio do Produto =>', response.data)
-      const {id} = response.data
-  
-      await postImages(id, images)
+      await createAnnounce(product)
 
       navigation.navigate('hometabs')
-      toast.show({
-        title: 'Announce created successfully!',
-        bg: 'blue_primary',
-        placement: 'top',
-        mx: 4
-      })
+      CustomToast('success', 'Announce created successfully!')
       
     } catch (error) {
-     ErrorToast(error) 
+      ErrorToast(error)
     }
   }
 
@@ -66,7 +56,7 @@ export function PreviewAnnounce() {
         </Text>
       </VStack>
 
-      <ImagesCarousel images={data.images}/>
+      <ImagesCarousel images={product.images}/>
 
       <ScrollView flex={1} px={6} py={5} showsVerticalScrollIndicator={false} contentContainerStyle={{paddingBottom: 128}}>
         <HStack alignItems='center' mb={6}>
@@ -77,13 +67,13 @@ export function PreviewAnnounce() {
         </HStack>
 
         <Tag
-        name={data.is_new ? 'New' : 'Used'}
+        name={product.is_new ? 'New' : 'Used'}
         isActive={false}
         />
 
         <HStack justifyContent='space-between' alignItems='center' my={2}>
           <Heading fontFamily='heading' fontSize='xl' color='gray.1'>
-            {data.name}
+            {product.name}
           </Heading>
 
           <HStack alignItems='center'>
@@ -92,13 +82,13 @@ export function PreviewAnnounce() {
             </Text>
             
             <Text fontFamily='heading' fontSize='xl' color='blue_secondary'>
-            {data.price}
+            {product.price}
             </Text>
           </HStack>
         </HStack>
 
         <Text fontFamily='body' fontSize='sm' color='gray.2'>
-          {data.description}  
+          {product.description}  
         </Text>
 
         <HStack alignItems='center' mt={6} mb={4}>
@@ -107,7 +97,7 @@ export function PreviewAnnounce() {
           </Text>
 
           <Text fontFamily='body' fontSize='sm' color='gray.2'>
-            {data.accept_trade ? 'Yes.' : 'No.'}
+            {product.accept_trade ? 'Yes.' : 'No.'}
           </Text>
         </HStack>
 
@@ -116,7 +106,7 @@ export function PreviewAnnounce() {
         </Text>
         
         <VStack mt={2}>
-        {data.payment_methods.map(method =>
+        {product.payment_methods.map(method =>
           <HStack alignItems='center' key={method}>
           <Icon as={MaterialCommunityIcons} name='cash-multiple' size={4} color='gray.2' mr={2}/>
           <Text fontFamily='body' textTransform='capitalize' fontSize='sm' color='gray.2'>

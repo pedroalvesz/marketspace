@@ -9,6 +9,7 @@ import BottomSheet from '@gorhom/bottom-sheet'
 import { UserProductsInfo } from '../components/UserProdutsInfo'
 import { HomeHeader } from '../components/HomeHeader'
 import { ProductCard } from '../components/ProductCard'
+import { SkeletonCard } from '../components/SkeletonCard'
 import { SearchBar } from '../components/SearchBar'
 import { CustomButton } from '../components/CustomButton'
 import { Loading } from '../components/Loading'
@@ -17,20 +18,16 @@ import { Tag } from '../components/Tag'
 
 import LogoSvg from '../assets/logo.svg'
 
-
 import { HomeTabNavigationRouteProps } from '../routes/hometab.routes'
 import { AppNavigationRouteProps } from '../routes/app.routes'
-import { useAuth } from '../hooks/useAuth'
-import { useUserProducts } from '../hooks/useUserProducts'
-import { api } from '../services/api'
+import { ErrorToast } from '../utils/ErrorToast'
+
 import { onSaleProductDTO } from '../dtos/onSaleProductDTO'
-import { SkeletonCard } from '../components/SkeletonCard'
+import { api } from '../services/api'
 
 
 
 export function Dashboard() {
-  const {user, ErrorToast} = useAuth()
-  const {products} = useUserProducts()
 
   const [isLoading, setIsLoading] = useState(true)
   const [loadingProducts, setLoadingProducts] = useState(true)
