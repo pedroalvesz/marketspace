@@ -9,6 +9,7 @@ import { EditAnnounce } from '../screens/EditAnnounce';
 import { AnnounceDetails } from '../screens/AnnounceDetails';
 
 import { CreateAnnounceDTO } from '../dtos/CreateAnnounceDTO';
+import { ProductDetailsDTO } from '../dtos/ProductDetails';
 
 type AppRoutes = {
   hometabs: undefined;
@@ -16,7 +17,7 @@ type AppRoutes = {
   createAnnounce: undefined;
   announceDetails: {id: string};
   previewAnnounce: CreateAnnounceDTO;
-  editAnnounce: {id: string};
+  editAnnounce: ProductDetailsDTO;
 }
 
 export type AppNavigationRouteProps = StackNavigationProp<AppRoutes>

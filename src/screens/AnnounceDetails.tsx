@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { Box, Heading, HStack, Icon, IconButton, ScrollView, Text, useToast, VStack } from "native-base";
-import {useNavigation, useRoute} from '@react-navigation/native'
+import {useNavigation, useRoute, useFocusEffect} from '@react-navigation/native'
 
 import {Feather, MaterialCommunityIcons, FontAwesome} from '@expo/vector-icons'
 
@@ -97,9 +97,9 @@ export function AnnounceDetails() {
     }
   }
 
-  useEffect(() => {
+  useFocusEffect(useCallback(() => {
     fetchProductDetails()
-  },[])
+  },[]))
 
   return(
     <VStack flex={1} bg='gray.6' pt={16}>
@@ -198,7 +198,7 @@ export function AnnounceDetails() {
           <HStack alignItems='center' key={method.key}>
           <Icon as={MaterialCommunityIcons} name='cash-multiple' size={4} color='gray.2' mr={2}/>
           <Text fontFamily='body' textTransform='capitalize' fontSize='sm' color='gray.2'>
-            {method.name}
+            {method.key}
           </Text>
           </HStack>
         )}

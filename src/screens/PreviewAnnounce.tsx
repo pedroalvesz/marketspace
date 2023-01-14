@@ -12,15 +12,17 @@ import { AppNavigationRouteProps } from "../routes/app.routes";
 import { CreateAnnounceDTO } from "../dtos/CreateAnnounceDTO";
 import { useAuth } from "../hooks/useAuth";
 import { api } from "../services/api";
+import { useUserProducts } from "../hooks/useUserProducts";
 
 
 export function PreviewAnnounce() {
 
   const {user, ErrorToast} = useAuth()
+  const {postImages} = useUserProducts()
   const navigation = useNavigation<AppNavigationRouteProps>()
 
   const route = useRoute()
-  const {data} = route.params as CreateAnnounceDTO
+  const data = route.params as CreateAnnounceDTO
   
   const toast = useToast()
 
@@ -36,7 +38,7 @@ export function PreviewAnnounce() {
       console.log('Envio do Produto =>', response.data)
       const {id} = response.data
   
-      await postImages(id, name, images)
+      await postImages(id, images)
 
       navigation.navigate('hometabs')
       toast.show({
@@ -51,30 +53,6 @@ export function PreviewAnnounce() {
     }
   }
 
-
-  async function postImages(id: string, name: string, images: string[]) {
-    try {
-      const imageData = new FormData()
-      imageData.append('product_id', id)
-  
-      images.forEach((item) => {
-        const imageExtension = item.split('.').pop()
-  
-        const imageFile = {
-          name: `${name}.${imageExtension}`,
-          uri: item,
-          type: `image/${imageExtension}`
-        } as any
-  
-        imageData.append('images', imageFile)
-      })
-  
-      await api.post('/products/images/', imageData, {headers: {'Content-Type' : 'multipart/form-data'}})
-
-    } catch (error) {
-      throw error
-    }
-  }
 
   return(
     <VStack flex={1} bg='gray.6'>

@@ -36,7 +36,6 @@ export function Dashboard() {
   const [loadingProducts, setLoadingProducts] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
 
-  const [userProducts, setUserProducts] = useState(products)
   const [Products, setProducts] = useState<onSaleProductDTO[]>([])
 
   const [filterName, setFilterName] = useState('')

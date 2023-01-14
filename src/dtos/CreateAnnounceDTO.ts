@@ -1,5 +1,4 @@
 export type CreateAnnounceDTO = {
-  data: {
     images: string[],
     name : string,
     description : string,
@@ -7,5 +6,4 @@ export type CreateAnnounceDTO = {
     price : number,
     accept_trade : boolean,
     payment_methods : string[],
-  }
 }

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Switch, TouchableOpacity } from "react-native";
+import { Keyboard, Switch, TouchableOpacity } from "react-native";
 import { Heading, HStack, VStack, IconButton, Icon, Text, Center, ScrollView, Radio, useTheme, Checkbox, Image, useToast} from "native-base";
 import {useNavigation, useRoute} from '@react-navigation/native'
 import * as ImagePicker from 'expo-image-picker'
@@ -15,6 +15,8 @@ import { AppNavigationRouteProps } from "../routes/app.routes";
 import { UserAnnounceDTO } from "../dtos/UserAnnounceDTO";
 import { useAuth } from "../hooks/useAuth";
 import { api } from "../services/api";
+import { useUserProducts } from "../hooks/useUserProducts";
+import { CreateAnnounceDTO } from "../dtos/CreateAnnounceDTO";
 
 
 //PRECISO PEGAR O ANOUNCIO PELO ID, FAZER A REQUISIÇÃO E COMPARAR SE O ARRAY DE IMAGENS MUDOU, SE MUDOU ENTÃO EU FAÇO O MÉTODO DE ENVIAR PRA API
@@ -28,14 +30,11 @@ export function EditAnnounce() {
   const route = useRoute()
   const product = route.params as UserAnnounceDTO
 
-  const paymentMethodsName = []
+  const paymentMethodsKey = product.payment_methods.map(({key}) => key)
 
-  product.payment_methods.forEach((method) => (
-    paymentMethodsName.push(method.key)
-  ))
-
+  const [editing, setEditing] = useState(false)
   const [oldImages, setOldImages] = useState<productImages[]>(product.product_images)
-  const [imagesDeleted, setImagesDeleted] = useState<string[]>([])
+  const [deletedImages, setDeletedImages] = useState<string[]>([])
   const [images, setImages] = useState<string[]>([])
 
   const [title, setTitle] = useState(product.name)
@@ -43,11 +42,13 @@ export function EditAnnounce() {
   const [isNew, setIsNew] = useState(product.is_new)
   const [price, setPrice] = useState(product.price.toString())
   const [isTradable, setIsTradable] = useState(product.accept_trade)
-  const [paymentMethods, setPaymentMethods] = useState(paymentMethodsName)
+  const [paymentMethods, setPaymentMethods] = useState(paymentMethodsKey)
   
+  const {editAnnounce} = useUserProducts()
   const {ErrorToast} = useAuth()
   const { colors } = useTheme()
   const toast = useToast()
+
 
 
   function handleGoBack() {
@@ -55,37 +56,37 @@ export function EditAnnounce() {
   }
 
   async function handleEditAnnounce() {
+    setEditing(true)
+    const updatedAnnounce: CreateAnnounceDTO = {
+      name: title,
+      images: images,
+      description,
+      is_new: isNew,
+      accept_trade: isTradable,
+      payment_methods: paymentMethods,
+      price: Number(price),
+    }
     try {
-      if(images.length + oldImages.length === 0 || paymentMethods.length === 0 || title.trim() === '' || description.trim() === '' || price.trim() === '') {
-        return toast.show({
-          title: 'Please fill out all fields.',
-          bg: 'yellow.400',
-          placement: 'top',
-          mx: 4,
-        })
-      }
+      await editAnnounce(updatedAnnounce, product.id, deletedImages, oldImages)
 
-      const data = {
-        name: title,
-        description,
-        is_new: isNew,
-        accept_trade: isTradable,
-        payment_methods: paymentMethods,
-        price: Number(price),
-      }
-      
-      await api.put(`/products/${product.id}`, data)
-      
-
+      handleGoBack()
+      toast.show({
+        title: 'FOIIII',
+        bg: 'blue_primary',
+        placement: 'top'
+      })
     } catch (error) {
       ErrorToast(error)
+    } finally {
+      setEditing(false)
     }
   }
+
 
   function handleRemoveImage(item) {
     if(item.id) {
       setOldImages(oldImages.filter(image => image.id !== item.id))
-      setImagesDeleted(prevValues => [...prevValues, item.id])
+      setDeletedImages(prevValues => [...prevValues, item.id])
     }
 
     setImages(images.filter(image => image !== item))
@@ -257,6 +258,7 @@ export function EditAnnounce() {
       name='Edit'
       bg='gray.1'
       textColor='gray.7'
+      isLoading={editing}
       onPress={handleEditAnnounce}
       />
     </HStack>

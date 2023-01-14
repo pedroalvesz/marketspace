@@ -85,7 +85,7 @@ export function CreateAnnounce() {
       payment_methods : paymentMethods,
     }
 
-    navigation.navigate('previewAnnounce', {data})
+    navigation.navigate('previewAnnounce', data)
   }
 
 
