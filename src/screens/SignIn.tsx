@@ -40,6 +40,7 @@ export function SignIn() {
 
   const {signIn} = useAuth()
   const [isPasswordHidden, setIsPasswordHidden] = useState(true)
+  const [logging, setLogging] = useState(false)
 
   const navigation = useNavigation<AuthNavigationRouteProps>()
   const {control, handleSubmit, formState: {errors}} = useForm<SignInProps>({
@@ -52,9 +53,12 @@ export function SignIn() {
 
   async function handleSignIn({email, password}: SignInProps) {
     try {
+      setLogging(true)
       await signIn(email, password)
     } catch (error) {
       ErrorToast(error)
+    } finally {
+      setLogging(false)
     }
   }
 
@@ -135,6 +139,7 @@ export function SignIn() {
           <Button
           variant='blue'
           w='full'
+          isLoading={logging}
           onPress={handleSubmit(handleSignIn)}
           >
             Enter

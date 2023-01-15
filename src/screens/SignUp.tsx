@@ -53,6 +53,7 @@ const SignUpSchema = yup.object({
 export function SignUp() {
 
   const {signIn} = useAuth()
+  const [registering, setRegistering] = useState(false)
   const [isPasswordHidden, setIsPasswordHidden] = useState(true)
   const [isConfirmHidden, setIsConfirmHidden] = useState(true)
   const [userPhoto, setUserPhoto] = useState('')
@@ -69,6 +70,7 @@ export function SignUp() {
 
   async function handleSignUp({name, email, tel, password} : SignUpProps) {
     try {
+      setRegistering(true)
       const photoExtension = userPhoto.split('.').pop()
 
       const photoFile = {
@@ -89,6 +91,8 @@ export function SignUp() {
 
     } catch (error) {
       ErrorToast(error)
+    } finally {
+      setRegistering(false)
     }
   }
 
@@ -252,7 +256,8 @@ export function SignUp() {
 
           <Button
           variant='black'
-          w='full'          
+          w='full'
+          isLoading={registering}
           onPress={handleSubmit(handleSignUp)}
           >
             Register

@@ -108,7 +108,7 @@ export function UserProductsProvider({children}: Props) {
         await postImages(productId, images)
       }
     } catch (error) {
-      
+      throw error
     }
   }
 

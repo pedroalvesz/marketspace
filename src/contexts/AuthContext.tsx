@@ -58,7 +58,6 @@ export function AppContextProvider({ children }: ProviderProps) {
         await userAndTokenSave(data.user, data.token)
         await userAndTokenUpdate(data.user, data.token)
       }
-
     } catch (error) {
       throw error
     }
@@ -85,7 +84,7 @@ export function AppContextProvider({ children }: ProviderProps) {
         await userAndTokenUpdate(userLogged, userToken)
       }
     } catch (error) {
-      
+      throw error
     } finally {
       setLoadingUserData(false)
     }

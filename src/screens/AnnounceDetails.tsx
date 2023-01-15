@@ -18,6 +18,7 @@ import { ProductDetailsDTO } from "../dtos/ProductDetails";
 import { api } from "../services/api";
 import { ErrorToast } from "../utils/ErrorToast";
 import { CustomToast } from "../utils/CustomToast";
+import { Linking } from "react-native";
 
 
 type RouteParams = {
@@ -29,6 +30,7 @@ export function AnnounceDetails() {
   const [isLoading, setIsLoading] = useState(true)
   const [isUpdating, setIsUpdating] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [sendingMessage, setSendingMessage] = useState(false)
   const [product, setProduct] = useState<ProductDetailsDTO>({} as ProductDetailsDTO)
 
   const {reloadProducts, removeAnnounce } = useUserProducts()
@@ -44,6 +46,17 @@ export function AnnounceDetails() {
 
   function handleGoBack() {
     navigation.goBack()
+  }
+
+  async function handleSendMessage() {
+    setSendingMessage(true)
+    try{
+      Linking.openURL(`https://wa.me/${product.user.tel}`)
+    } catch(error) {
+      ErrorToast(error)
+    } finally {
+      setSendingMessage(false)
+    }
   }
 
   async function fetchProductDetails() {
@@ -237,6 +250,8 @@ export function AnnounceDetails() {
         <Button
         variant='blue'
         leftIcon={<Icon as={FontAwesome} name='whatsapp' size={5} color='gray.7'/>}
+        isLoading={sendingMessage}
+        onPress={handleSendMessage}
         >
           Send Message
         </Button>
