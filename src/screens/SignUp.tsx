@@ -1,5 +1,6 @@
 import {useState} from 'react'
 import {
+  Button,
   Center,
   Heading,
   Icon,
@@ -18,7 +19,6 @@ import * as ImagePicker from 'expo-image-picker'
 
 import { Feather } from '@expo/vector-icons';
 
-import { CustomButton } from '../components/CustomButton'
 import { FormImage } from '../components/FormImage'
 import { FormInput } from '../components/Input'
 
@@ -143,7 +143,7 @@ export function SignUp() {
           onPress={handleSetUserPhoto}
           />
 
-          <Center mt={4} mb={6}>
+          <Center mt={4} mb={2}>
             <Controller
             control={control}
             name='name'
@@ -250,13 +250,13 @@ export function SignUp() {
             />       
           </Center>
 
-          <CustomButton
-          name="Register"
+          <Button
+          variant='black'
+          w='full'          
           onPress={handleSubmit(handleSignUp)}
-          bg="gray.1"
-          textColor="gray.7"
-          isBig
-          />
+          >
+            Register
+          </Button>
 
           <Center width="100%" my={12}>
             <Text
@@ -269,13 +269,13 @@ export function SignUp() {
               Already registered?
             </Text>
 
-            <CustomButton
-              name="Back to Login"
-              bg="gray.5"
-              textColor="gray.2"
-              onPress={handleGoBack}
-              isBig
-            />
+            <Button
+            variant='gray'
+            w='full' 
+            onPress={handleGoBack}
+            >
+              Back to Login
+            </Button>
           </Center>
         </VStack>
       </ScrollView>

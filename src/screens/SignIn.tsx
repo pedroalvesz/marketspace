@@ -1,5 +1,6 @@
 import {useState} from 'react'
 import {
+  Button,
   Center,
   Icon,
   IconButton,
@@ -16,7 +17,6 @@ import {useForm, Controller} from 'react-hook-form'
 import {yupResolver} from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
-import { CustomButton } from '../components/CustomButton'
 import { FormInput } from '../components/Input'
 import LogoSvg from '../assets/logo.svg'
 import SubTitleSvg from '../assets/subtitle.svg'
@@ -59,8 +59,8 @@ export function SignIn() {
   }
 
   return (
-    <KeyboardAvoidingView behavior="height">
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+    <KeyboardAvoidingView behavior="padding">
+      <ScrollView contentContainerStyle={{ flexGrow: 1}} showsVerticalScrollIndicator={false}>
         <VStack
           bg="gray.6"
           pt={32}
@@ -132,11 +132,13 @@ export function SignIn() {
           </Center>
 
 
-          <CustomButton
-          name="Enter"
+          <Button
+          variant='blue'
+          w='full'
           onPress={handleSubmit(handleSignIn)}
-          isBig
-          />
+          >
+            Enter
+          </Button>
         </VStack>
 
         <Center pt={12} px={12} pb={6} color="white">
@@ -144,13 +146,13 @@ export function SignIn() {
             Not registered yet?
           </Text>
 
-          <CustomButton
-            name="Register"
-            bg="gray.5"
-            textColor="gray.2"
-            onPress={handleNavigateRegister}
-            isBig
-          />
+          <Button
+          variant='gray'
+          w='full'          
+          onPress={handleNavigateRegister}
+          >
+            Register
+          </Button>
         </Center>
       </ScrollView>
     </KeyboardAvoidingView>

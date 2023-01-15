@@ -12,13 +12,13 @@ import {
   Radio,
   useTheme,
   Checkbox,
+  Button,
 } from 'native-base'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import * as ImagePicker from 'expo-image-picker'
 import { Feather, FontAwesome5 } from '@expo/vector-icons'
 
 import { FormTextArea } from '../components/FormTextArea'
-import { CustomButton } from '../components/CustomButton'
 import { DemoImage } from '../components/DemoImage'
 import { FormInput } from '../components/Input'
 
@@ -292,19 +292,17 @@ export function EditAnnounce() {
         py={4}
         pb={6}
       >
-        <CustomButton
-          name="Cancel"
-          bg="gray.5"
-          textColor="gray.2"
+        <Button
           onPress={handleGoBack}
-        />
-        <CustomButton
-          name="Edit"
-          bg="gray.1"
-          textColor="gray.7"
+        >
+          Unable Announce
+        </Button>
+        <Button
           isLoading={editing}
           onPress={handleEditAnnounce}
-        />
+        >
+          Delete Announce
+        </Button>
       </HStack>
     </>
   )

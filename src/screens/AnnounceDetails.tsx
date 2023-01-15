@@ -1,12 +1,10 @@
 import { useCallback, useState } from "react";
-import { Box, Heading, HStack, Icon, IconButton, ScrollView, Text, useToast, VStack } from "native-base";
+import { Box, Button, Heading, HStack, Icon, IconButton, ScrollView, Text, useToast, VStack } from "native-base";
 import {useNavigation, useRoute, useFocusEffect} from '@react-navigation/native'
 
 import {Feather, MaterialCommunityIcons, FontAwesome} from '@expo/vector-icons'
 
 import { ImagesCarousel } from "../components/ImageCarousel";
-import { CustomIconButton } from "../components/CustomIconButton";
-import { CustomButton } from "../components/CustomButton";
 import { Loading } from "../components/Loading";
 import { UserPhoto } from "../components/UserPhoto";
 import { Tag } from "../components/Tag";
@@ -208,25 +206,21 @@ export function AnnounceDetails() {
       {isMyProduct
       ?
       <VStack bg='white' alignItems='center' position='absolute' w='100%' h='125px' bottom={0} pt={2} pb={6} space={2}>
-        <CustomButton
-        name={product.is_active ? 'Disable Announce' : 'Enable Announce'}
-        bg={product.is_active ? 'gray.1' : 'blue_secondary'}
-        isBig
+        <Button
         leftIcon={<Icon as={Feather} name='power'/>}
         isLoading={isUpdating}
         onPress={handleEnableOrDisableAnnounce}
-        />
+        >
+          {product.is_active ? 'Disable Announce' : 'Enable Announce'}
+        </Button>
 
-        <CustomButton
-        name='Delete Announce'
-        bg='gray.5'
-        textColor='gray.1'
-        isBig
-        mb={2}
+        <Button
         leftIcon={<Icon as={Feather} name='trash' color='gray.1'/>}
         isLoading={isDeleting}
         onPress={handleRemoveAnnounce}
-        />
+        >
+          Delete Announce
+        </Button>
       </VStack>
       :
       <HStack bg='white' w='100%' position='absolute' bottom={0} h='90px' justifyContent='space-between' px={6} py={4} pb={6}>
@@ -240,12 +234,12 @@ export function AnnounceDetails() {
           </Text>
         </HStack>
 
-        <CustomIconButton
-        name='Send Message'
-        bg='blue_primary'
-        leftIcon={<Icon as={FontAwesome} name='whatsapp' size={5}/>}
-        textColor='gray.7'
-        />
+        <Button
+        variant='blue'
+        leftIcon={<Icon as={FontAwesome} name='whatsapp' size={5} color='gray.7'/>}
+        >
+          Send Message
+        </Button>
       </HStack>
       }
       </>

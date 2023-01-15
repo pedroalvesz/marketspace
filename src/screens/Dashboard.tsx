@@ -1,6 +1,6 @@
 import { useState, useRef, useMemo, useCallback } from 'react'
 import { RefreshControl } from 'react-native'
-import { Checkbox, FlatList, Heading, HStack, Icon, IconButton, ScrollView, Switch, Text, VStack } from 'native-base'
+import {Button, Checkbox, FlatList, Heading, HStack, Icon, IconButton, ScrollView, Switch, Text, VStack } from 'native-base'
 import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import {AntDesign} from '@expo/vector-icons'
 
@@ -11,7 +11,6 @@ import { HomeHeader } from '../components/HomeHeader'
 import { ProductCard } from '../components/ProductCard'
 import { SkeletonCard } from '../components/SkeletonCard'
 import { SearchBar } from '../components/SearchBar'
-import { CustomButton } from '../components/CustomButton'
 import { Loading } from '../components/Loading'
 import { Filters } from '../components/Filters'
 import { Tag } from '../components/Tag'
@@ -234,7 +233,6 @@ export function Dashboard() {
           <Switch
           isChecked={isTradable}
           onToggle={() => setIsTradable(prevValue => !prevValue)}
-          onTrackColor="blue_secondary"
           mb={6}
           />
           
@@ -257,18 +255,16 @@ export function Dashboard() {
           </Checkbox.Group>
 
           <HStack justifyContent='space-between'> 
-            <CustomButton
-            name='Reset Filters'
-            bg='gray.5'
-            textColor='gray.2'
+            <Button
             onPress={handleResetFilters}
-            />
-            <CustomButton
-            name='Apply Filters'
-            bg='gray.1'
-            textColor='gray.7'
+            >
+
+            </Button>
+            <Button
             onPress={handleFilterProducts}
-            />
+            >
+
+            </Button>
           </HStack>
         </ScrollView>
       </VStack>

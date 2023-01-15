@@ -1,9 +1,8 @@
-import {Heading, HStack, Icon, ScrollView, Text, VStack } from "native-base";
+import {Button, Heading, HStack, Icon, ScrollView, Text, VStack } from "native-base";
 import {useNavigation, useRoute} from '@react-navigation/native'
 
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, Feather} from '@expo/vector-icons';
 
-import { CustomButton } from "../components/CustomButton";
 import { ImagesCarousel } from "../components/ImageCarousel";
 import { UserPhoto } from "../components/UserPhoto";
 import { Tag } from "../components/Tag";
@@ -120,19 +119,23 @@ export function PreviewAnnounce() {
       </ScrollView>
 
       <HStack bg='white' w='100%' position='absolute' bottom={0} h='90px' justifyContent='space-between' px={6} py={4} pb={6}>
-        <CustomButton
-        name='Back'
-        bg='gray.5'
-        textColor='gray.2'
-        onPress={handleGoBack}
-        />
-
-        <CustomButton
-        name='Announce'
-        bg='blue_secondary'
-        textColor='gray.7'
-        onPress={handleAnnounce}
-        />
+      <Button
+      variant='gray'
+      w='48%'
+      leftIcon={<Icon as={Feather} name='arrow-left' size={4} color='gray.2' mr={1}/>}
+      onPress={handleGoBack}
+      >
+       Back to Edit
+      </Button>
+      <Button
+      alignItems='center'
+      variant='blue'
+      w='48%'
+      leftIcon={<Icon as={Feather} name='tag' size={4} color='gray.7' mr={1}/>}
+      onPress={handleAnnounce}
+      >
+        Announce
+      </Button>
       </HStack>
     </VStack>
   )

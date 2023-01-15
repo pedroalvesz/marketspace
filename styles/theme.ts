@@ -35,16 +35,75 @@ export const theme = extendTheme({
   },
   components: {
     Button: {
+      baseStyle: () => ({
+        rounded: 'md',
+        h: '48px',
+        p: 3,
+      }),
+      defaultProps: () => ({
+        variant: 'blue',
+      }),
       variants: {
-        rounded: ({
-          colorScheme
-        }) => {
-          return {
-            bg: `${colorScheme}.500`,
-            rounded: "full"
-          };
-        }
+        black: (props: any) => ({
+          bg: 'gray.1',
+          _pressed: {
+            bg: 'gray.2'
+          },
+          _text: {
+            color: 'gray.7',
+            fontFamily: 'heading',
+            fontSize: 'sm',
+          },
+          ...props
+        }),
+        gray: (props: any) => ({
+          bg: 'gray.5',
+          _pressed: {
+            bg: 'gray.6'
+          },
+          _text: {
+            color: 'gray.2',
+            fontFamily: 'heading',
+            fontSize: 'sm',
+          },
+          ...props
+        }),
+        blue: (props: any) => ({
+          bg: 'blue_secondary',
+          _pressed: {
+            bg: 'blue_primary'
+          },
+          _text: {
+            color: 'gray.7',
+            fontFamily: 'heading',
+            fontSize: 'sm',
+          },
+          ...props
+        })
       }
+    },
+    Checkbox: {
+      baseStyle: () => ({
+        _checked: {
+          borderColor: 'blue_secondary',
+          bg: 'blue_secondary',
+        }
+      })
+    },
+    Switch: {
+      baseStyle: () => ({
+        onTrackColor: 'blue_secondary',
+      })
+    },
+    Radio: {
+      baseStyle: () => ({
+        _checked: {
+          borderColor: 'blue_secondary',
+          _icon: {
+            color: 'blue_secondary',
+          }
+        }
+      })
     }
   }
 })

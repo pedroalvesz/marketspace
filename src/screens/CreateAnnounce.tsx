@@ -1,13 +1,12 @@
 import { useState } from "react";
-import { Switch, TouchableOpacity } from "react-native";
-import { Heading, HStack, VStack, IconButton, Icon, Text, Center, ScrollView, Radio, useTheme, Checkbox, useToast} from "native-base";
+import {TouchableOpacity } from "react-native";
+import {Switch, Heading, HStack, VStack, IconButton, Icon, Text, Center, ScrollView, Radio, useTheme, Checkbox, useToast, Button, KeyboardAvoidingView} from "native-base";
 import {useNavigation} from '@react-navigation/native'
 import * as ImagePicker from 'expo-image-picker'
 import {Feather, FontAwesome5} from '@expo/vector-icons'
 
 
 import { FormTextArea } from "../components/FormTextArea";
-import { CustomButton } from "../components/CustomButton";
 import { DemoImage } from "../components/DemoImage";
 import {FormInput} from '../components/Input'
 
@@ -175,8 +174,7 @@ export function CreateAnnounce() {
         
         <Switch
         value={isTradable}
-        onValueChange={() => setIsTradable(prevValue => !prevValue)}
-        trackColor={{ false: "#767577", true: colors.primary[600] }}
+        onValueChange={() => setIsTradable(prevValue => !!prevValue)}
         />
 
         <Text fontFamily='heading' fontSize='sm' color='gray.2' mt={4} mb={1}>
@@ -205,20 +203,21 @@ export function CreateAnnounce() {
     </VStack>
 
     <HStack bg='white' w='100%' position='absolute' bottom={0} h='90px' justifyContent='space-between' px={6} py={4} pb={6}>
-      <CustomButton
-      name='Cancel'
-      bg='gray.5'
-      textColor='gray.2'
+      <Button
+      variant='gray'
+      w='48%'
       onPress={handleGoBack}
-      />
-      <CustomButton
-      name='Preview'
-      bg='gray.1'
-      textColor='gray.7'
+      >
+       Cancel
+      </Button>
+      <Button
+      variant='black'
+      w='48%'
       onPress={handlePreview}
-      />
+      >
+        Preview
+      </Button>
     </HStack>
-    
     </>
   )
 }

@@ -1,8 +1,7 @@
-import { HStack, Icon, Text, VStack } from "native-base";
+import { Button, HStack, Icon, Text, VStack } from "native-base";
 import {useNavigation} from '@react-navigation/native'
 import { FontAwesome5 } from '@expo/vector-icons'; 
 
-import { CustomIconButton } from "./CustomIconButton";
 import { AppNavigationRouteProps } from "../routes/app.routes";
 import { UserPhoto } from "./UserPhoto";
 import { api } from "../services/api";
@@ -39,13 +38,13 @@ export function HomeHeader() {
         </VStack>
       </HStack>
 
-      <CustomIconButton
-        name='Announce'
-        bg='gray.1'
-        textColor='gray.7'
-        leftIcon={<Icon as={FontAwesome5} name='plus'/>}
-        onPress={handleCreateAnnounce}
-        />
+      <Button
+      variant='black'
+      leftIcon={<Icon as={FontAwesome5} name='plus' color='gray.7'/>}
+      onPress={handleCreateAnnounce}
+      >
+        Announce
+      </Button>
     </HStack>
   )
 }
