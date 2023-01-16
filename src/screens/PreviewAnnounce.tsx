@@ -1,4 +1,5 @@
-import {Button, Heading, HStack, Icon, ScrollView, Text, VStack } from "native-base";
+import { useState } from "react";
+import {Button, Heading, HStack, Icon, ScrollView, Text,VStack } from "native-base";
 import {useNavigation, useRoute} from '@react-navigation/native'
 
 import { MaterialCommunityIcons, Feather} from '@expo/vector-icons';
@@ -19,6 +20,8 @@ import { CustomToast } from "../utils/CustomToast";
 
 export function PreviewAnnounce() {
 
+  const [announcing, setAnnouncing] = useState(false)
+
   const {user} = useAuth()
   const {createAnnounce} = useUserProducts()
   const navigation = useNavigation<AppNavigationRouteProps>()
@@ -32,6 +35,7 @@ export function PreviewAnnounce() {
 
   async function handleAnnounce() {
     try {
+      setAnnouncing(true)
       await createAnnounce(product)
 
       navigation.navigate('hometabs')
@@ -39,6 +43,8 @@ export function PreviewAnnounce() {
       
     } catch (error) {
       ErrorToast(error)
+    } finally {
+      setAnnouncing(false)
     }
   }
 
@@ -132,6 +138,7 @@ export function PreviewAnnounce() {
       variant='blue'
       w='48%'
       leftIcon={<Icon as={Feather} name='tag' size={4} color='gray.7' mr={1}/>}
+      isLoading={announcing}
       onPress={handleAnnounce}
       >
         Announce

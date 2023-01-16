@@ -218,9 +218,11 @@ export function AnnounceDetails() {
       
       {isMyProduct
       ?
-      <VStack bg='white' alignItems='center' position='absolute' w='100%' h='125px' bottom={0} pt={2} pb={6} space={2}>
+      <VStack bg='white' alignItems='center' position='absolute' w='100%' h='130px' bottom={0} pt={2} pb={6} px={6} space={2}>
         <Button
-        leftIcon={<Icon as={Feather} name='power'/>}
+        variant={product.is_active ? 'black' : 'blue'}
+        w='full'
+        leftIcon={<Icon as={Feather} name='power' color='white'/>}
         isLoading={isUpdating}
         onPress={handleEnableOrDisableAnnounce}
         >
@@ -228,6 +230,8 @@ export function AnnounceDetails() {
         </Button>
 
         <Button
+        variant='gray'
+        w='full'        
         leftIcon={<Icon as={Feather} name='trash' color='gray.1'/>}
         isLoading={isDeleting}
         onPress={handleRemoveAnnounce}

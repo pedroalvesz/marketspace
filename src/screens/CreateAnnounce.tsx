@@ -1,17 +1,15 @@
 import { useState } from "react";
 import {TouchableOpacity } from "react-native";
-import {Switch, Heading, HStack, VStack, IconButton, Icon, Text, Center, ScrollView, Radio, useTheme, Checkbox, useToast, Button, KeyboardAvoidingView} from "native-base";
+import {Switch, Heading, HStack, VStack, IconButton, Icon, Text, Center, ScrollView, Radio, useTheme, Checkbox, useToast, Button} from "native-base";
 import {useNavigation} from '@react-navigation/native'
 import * as ImagePicker from 'expo-image-picker'
 import {Feather, FontAwesome5} from '@expo/vector-icons'
-
 
 import { FormTextArea } from "../components/FormTextArea";
 import { DemoImage } from "../components/DemoImage";
 import {FormInput} from '../components/Input'
 
 import { AppNavigationRouteProps } from "../routes/app.routes";
-
 
 
 
@@ -26,7 +24,6 @@ export function CreateAnnounce() {
   const [paymentMethods, setPaymentMethods] = useState<string[]>([])
 
 
-  const { colors } = useTheme()
   const navigation = useNavigation<AppNavigationRouteProps>()
   const toast = useToast()
 
@@ -173,8 +170,8 @@ export function CreateAnnounce() {
         </Text>
         
         <Switch
-        value={isTradable}
-        onValueChange={() => setIsTradable(prevValue => !!prevValue)}
+        isChecked={isTradable}
+        onToggle={() => setIsTradable(prevValue => !prevValue)}
         />
 
         <Text fontFamily='heading' fontSize='sm' color='gray.2' mt={4} mb={1}>
