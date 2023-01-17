@@ -1,7 +1,7 @@
 
 
   <div width="100%" overflow="hidden" align="center">
-  <img src="showcase.png" width="40%" />
+  <img src="showcase.gif" width="40%" />
   </div>
   <br>
   <br>
