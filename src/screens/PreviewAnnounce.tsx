@@ -15,6 +15,7 @@ import { ErrorToast } from "../utils/ErrorToast";
 
 import { CreateAnnounceDTO } from "../dtos/CreateAnnounceDTO";
 import { CustomToast } from "../utils/CustomToast";
+import { api } from "../services/api";
 
 
 
@@ -65,7 +66,7 @@ export function PreviewAnnounce() {
 
       <ScrollView flex={1} px={6} py={5} showsVerticalScrollIndicator={false} contentContainerStyle={{paddingBottom: 128}}>
         <HStack alignItems='center' mb={6}>
-          <UserPhoto/>
+          <UserPhoto source={{uri: `${api.defaults.baseURL}/images/${user.avatar}`}}/>
           <Text fontFamily="body" fontSize="sm" color="gray.1" ml={2}>
             {user.name}
           </Text>

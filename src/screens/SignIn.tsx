@@ -95,6 +95,7 @@ export function SignIn() {
               <FormInput
               placeholder="E-mail"
               onChangeText={onChange}
+              keyboardType='email-address'
               errorMessage={errors.email?.message}
               />
             )}

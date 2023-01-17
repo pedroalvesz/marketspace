@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Switch, TouchableOpacity} from 'react-native'
+import {TouchableOpacity} from 'react-native'
 import {
   Heading,
   HStack,
@@ -13,6 +13,7 @@ import {
   useTheme,
   Checkbox,
   Button,
+  Switch,
 } from 'native-base'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import * as ImagePicker from 'expo-image-picker'
@@ -241,9 +242,8 @@ export function EditAnnounce() {
             </Text>
 
             <Switch
-              value={isTradable}
-              onValueChange={() => setIsTradable(prevValue => !prevValue)}
-              trackColor={{ false: '#767577', true: colors.primary[600] }}
+              isChecked={isTradable}
+              onToggle={() => setIsTradable(prevValue => !prevValue)}
             />
 
             <Text
@@ -293,11 +293,15 @@ export function EditAnnounce() {
         pb={6}
       >
         <Button
+          variant='gray'
+          w='48%'        
           onPress={handleGoBack}
         >
           Unable Announce
         </Button>
         <Button
+          variant='black'
+          w='48%'
           isLoading={editing}
           onPress={handleEditAnnounce}
         >

@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo, useCallback } from 'react'
+import { useState, useRef, useMemo, useCallback, useEffect } from 'react'
 import { RefreshControl } from 'react-native'
 import {Button, Checkbox, FlatList, Heading, HStack, Icon, IconButton, ScrollView, Switch, Text, VStack } from 'native-base'
 import { useNavigation, useFocusEffect } from '@react-navigation/native'
@@ -122,9 +122,13 @@ export function Dashboard() {
     }
   }
 
-  useFocusEffect(useCallback(() => {
+  // useFocusEffect(useCallback(() => {
+  //   fetchProducts()
+  // },[]))
+
+  useEffect(() => {
     fetchProducts()
-  },[]))
+  },[])
 
   return (
     <VStack flex={1} bg="gray.6" pt={16} px={6}>
@@ -256,14 +260,18 @@ export function Dashboard() {
 
           <HStack justifyContent='space-between'> 
             <Button
+            variant='gray'
+            w='48%'
             onPress={handleResetFilters}
             >
-
+              Reset Filters
             </Button>
             <Button
+            variant='black'
+            w='48%'
             onPress={handleFilterProducts}
             >
-
+              Apply Filters
             </Button>
           </HStack>
         </ScrollView>

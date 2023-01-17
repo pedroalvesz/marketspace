@@ -1,4 +1,4 @@
-import {IInputProps, Input, FormControl, IconButton, Icon } from 'native-base'
+import {IInputProps, Input, FormControl} from 'native-base'
 
 
 type InputProps = IInputProps & {

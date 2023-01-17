@@ -29,6 +29,7 @@ import DefaultUserPhoto from '../assets/DefaultUserPhoto.png'
 import { api } from '../services/api'
 import { useAuth } from '../hooks/useAuth'
 import { ErrorToast } from '../utils/ErrorToast'
+import { CustomToast } from '../utils/CustomToast'
 
 
 type SignUpProps = {
@@ -45,10 +46,13 @@ const SignUpSchema = yup.object({
   email: yup.string().required('Email is required.').email('Please insert a valid email'),
   tel: yup.string().required('Phone number is required.'),
   password: yup.string().required('Password is required.').min(6, 'Your password must have at least 6 characters.'),
-  password_confirm: yup.string().required('Please confirm your password.').oneOf([yup.ref('password'), 'Passwords do not match.'], null)
+  password_confirm: yup.string().required('Please confirm your password.').oneOf([yup.ref('password'), null], 'Passwords do not match.')
 })
 
-
+type userPhotoProps = {
+  uri: string,
+  type: string,
+}
 
 export function SignUp() {
 
@@ -56,7 +60,7 @@ export function SignUp() {
   const [registering, setRegistering] = useState(false)
   const [isPasswordHidden, setIsPasswordHidden] = useState(true)
   const [isConfirmHidden, setIsConfirmHidden] = useState(true)
-  const [userPhoto, setUserPhoto] = useState('')
+  const [userPhoto, setUserPhoto] = useState<userPhotoProps>({} as userPhotoProps)
 
   const navigation = useNavigation<AuthNavigationRouteProps>()
 
@@ -71,12 +75,15 @@ export function SignUp() {
   async function handleSignUp({name, email, tel, password} : SignUpProps) {
     try {
       setRegistering(true)
-      const photoExtension = userPhoto.split('.').pop()
+
+      if(!userPhoto.uri) {
+        return CustomToast('warning', 'You must choose an avatar.')
+      }
 
       const photoFile = {
-        name: `${name}.${photoExtension}`,
-        uri: userPhoto,
-        type: `image/${photoExtension}`
+        name: `${name}.${userPhoto.type.split('/').pop()}`,
+        uri: userPhoto.uri,
+        type: userPhoto.type,
       } as any;
 
       const userData = new FormData()
@@ -85,6 +92,7 @@ export function SignUp() {
       userData.append('email', email)
       userData.append('tel', tel)
       userData.append('password', password)
+
 
       await api.post('/users', userData, {headers: {'Content-Type' : 'multipart/form-data'}} )
       await signIn(email, password)
@@ -111,7 +119,11 @@ export function SignUp() {
     }
 
     if(PhotoSelected.assets[0].uri) {
-      setUserPhoto(PhotoSelected.assets[0].uri)
+      const photoExtension = PhotoSelected.assets[0].uri.split('.').pop()
+      setUserPhoto({
+        uri: PhotoSelected.assets[0].uri,
+        type: `image/${photoExtension}`
+      })
     }
   }
 
@@ -143,7 +155,7 @@ export function SignUp() {
           </Text>
 
           <FormImage
-          source={userPhoto ? {uri : userPhoto} : DefaultUserPhoto}
+          source={userPhoto.uri ? {uri : userPhoto.uri} : DefaultUserPhoto}
           onPress={handleSetUserPhoto}
           />
 
@@ -167,6 +179,7 @@ export function SignUp() {
             render={({field : {onChange}}) =>
               <FormInput
               placeholder="Email"
+              keyboardType='email-address'
               onChangeText={onChange}
               errorMessage={errors.email?.message}
               />
@@ -179,6 +192,7 @@ export function SignUp() {
             render={({field : {onChange}}) =>
               <FormInput
               placeholder="Phone number"
+              keyboardType='number-pad'
               onChangeText={onChange}
               errorMessage={errors.tel?.message}
               />
@@ -222,10 +236,11 @@ export function SignUp() {
             <Controller
             control={control}
             name='password_confirm'
-            render={({field : {onChange}}) =>
+            render={({field : {onChange, value}}) =>
               <FormInput
               placeholder="Confirm Password"
               onChangeText={onChange}
+              value={value}
               errorMessage={errors.password_confirm?.message}
               secureTextEntry={isConfirmHidden ? true : false}
               rightElement={
